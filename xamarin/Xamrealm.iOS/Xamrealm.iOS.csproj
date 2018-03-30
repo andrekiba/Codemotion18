@@ -134,4 +134,7 @@
       <Name>Xamrealm</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
 </Project>
