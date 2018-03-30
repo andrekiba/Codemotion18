@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamrealm.Android", "Xamrealm\Xamrealm.Android\Xamrealm.Android.csproj", "{58EA6179-191E-4A25-9DD4-7AAF921FC8CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamrealm.Android", "Xamrealm.Android\Xamrealm.Android.csproj", "{58EA6179-191E-4A25-9DD4-7AAF921FC8CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamrealm.iOS", "Xamrealm\Xamrealm.iOS\Xamrealm.iOS.csproj", "{150FC003-2D09-481F-BF4D-3177031C90E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamrealm.iOS", "Xamrealm.iOS\Xamrealm.iOS.csproj", "{150FC003-2D09-481F-BF4D-3177031C90E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamrealm.UWP", "Xamrealm\Xamrealm.UWP\Xamrealm.UWP.csproj", "{9DBC3A16-4CA6-47C8-A159-64FE4224CCA4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamrealm.UWP", "Xamrealm.UWP\Xamrealm.UWP.csproj", "{9DBC3A16-4CA6-47C8-A159-64FE4224CCA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamrealm", "Xamrealm\Xamrealm\Xamrealm.csproj", "{31E83732-A451-4858-949A-39495BDB15CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamrealm", "Xamrealm\Xamrealm.csproj", "{31E83732-A451-4858-949A-39495BDB15CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
