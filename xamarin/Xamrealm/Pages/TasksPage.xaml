@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:base="clr-namespace:Xamrealm.Base;assembly=Xamrealm"
+             xmlns:controls="clr-namespace:Xamrealm.Controls;assembly=Xamrealm"
+             xmlns:behaviors="clr-namespace:Xamrealm.Behaviors;assembly=Xamrealm"
+             xmlns:local="clr-namespace:Xamrealm.Models;assembly=Xamrealm"
+             mc:Ignorable="d"
+             x:Class="Xamrealm.Pages.TasksPage"
+             Title="{Binding TaskList.Title}"
+             d:BindingContext="{x:Static base:DesignViewModelLocator.TasksViewModel}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding AddTaskCommand}" Icon="add.png"/>
+    </ContentPage.ToolbarItems>
+
+    <ListView ItemsSource="{Binding TaskList.Tasks}" 
+              x:Name="TasksListView" 
+              RowHeight="60"
+              SeparatorVisibility="None"
+              BackgroundColor="Black">
+        <ListView.Behaviors>
+            <behaviors:CellDeselectingBehavior />
+        </ListView.Behaviors>
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell x:Name="TaskCell">
+                    <ViewCell.ContextActions>
+                        <MenuItem Text="Delete"
+                                  IsDestructive="true"
+                                  Command="{Binding Path=BindingContext.DeleteTaskCommand, Source={x:Reference Name=TasksListView}}"
+                                  CommandParameter="{Binding .}" />
+                        <MenuItem Text="Complete"
+                                  Command="{Binding Path=BindingContext.CompleteTaskCommand, Source={x:Reference Name=TasksListView}}"
+                                  CommandParameter="{Binding .}" />
+                    </ViewCell.ContextActions>
+                    <Grid>
+                        <Grid.Behaviors>
+                            <behaviors:ItemColoringBehavior x:TypeArguments="local:Task"
+                                                        RealmCollection="{Binding ItemsSource, Source={x:Reference TasksListView}}"
+                                                        Colors="{StaticResource TaskColors}"
+                                                        CompletedColor="{StaticResource CompletedColor}"/>
+                        </Grid.Behaviors>
+                        <controls:TransparentEntry
+                            Text="{Binding Title}"
+                            TextColor="White"
+                            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                            IsStrikeThrough="{Binding IsCompleted}"/>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+
+</ContentPage>

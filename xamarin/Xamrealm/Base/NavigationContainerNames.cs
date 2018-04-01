@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Xamrealm.Base
+﻿namespace Xamrealm.Base
 {
     public static class NavigationContainerNames
     {

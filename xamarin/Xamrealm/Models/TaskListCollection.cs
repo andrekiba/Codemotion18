@@ -9,7 +9,7 @@ namespace Xamrealm.Models
         [MapTo("id")]
         public int Id { get; set; }
 
-        [MapTo("items")]
+        [MapTo("taskLists")]
         public IList<TaskList> TaskLists { get; }
     }
 }

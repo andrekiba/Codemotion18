@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:base="clr-namespace:Xamrealm.Base;assembly=Xamrealm"
+             mc:Ignorable="d"
+             x:Class="Xamrealm.Pages.LoginPage"
+             Title="Login"
+             d:BindingContext="{x:Static base:DesignViewModelLocator.LoginViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "10" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "Auto" />
+            <RowDefinition Height = "*" />
+        </Grid.RowDefinitions>
+
+        <Entry Grid.Row="1" Placeholder="Server url" Text="{Binding LoginInfo.ServerUrl}" Margin="10" Keyboard ="Url" />
+        <Entry Grid.Row="2" Placeholder="Username" Text="{Binding LoginInfo.Username}"  Margin="10" Keyboard="Email" />
+        <Entry Grid.Row="3" Placeholder="Password" Text="{Binding Password}" Margin="10" IsPassword="true" />
+        <Button Grid.Row="4" Text="Login" Command="{Binding LoginCommand}" Margin="10" />
+    </Grid>
+</ContentPage>

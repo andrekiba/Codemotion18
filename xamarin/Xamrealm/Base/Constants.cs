@@ -12,7 +12,7 @@ namespace Xamrealm.Base
         {
             public static string SyncHost { get; set; } = "127.0.0.1:9080";
 
-            public static Uri SyncServerUri => new Uri($"realm://{SyncHost}/~/realmtasks");
+            public static Uri SyncServerUri => new Uri($"realm://{SyncHost}/~/xamrealm");
 
             public static Uri AuthServerUri => new Uri($"http://{SyncHost}");
         }
@@ -42,13 +42,6 @@ namespace Xamrealm.Base
             };
 
             public static readonly Color CompletedColor = new Color(51 / 255.0, 51 / 255.0, 51 / 255.0);
-        }
-
-        public static class ADCredentials
-        {
-            public const string ClientId = "your-client-id";
-            public const string CommonAuthority = "https://login.windows.net/common";
-            public static Uri RedirectUri = new Uri("http://your-redirect-uri");
         }
     }
 }
