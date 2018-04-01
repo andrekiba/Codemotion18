@@ -1,19 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using FreshMvvm;
 using Xamarin.Forms;
+using Xamrealm.Base;
+using Xamrealm.Converters;
+using Xamrealm.ViewModels;
+using Constants = Xamrealm.Base.Constants;
 
 namespace Xamrealm
 {
 	public partial class App : Application
 	{
-		public App ()
+	    public static App Instance { get; private set; }
+
+        public App ()
 		{
 			InitializeComponent();
 
-			MainPage = new Xamrealm.MainPage();
+		    Instance = this;
+
+            Resources = new ResourceDictionary
+		    {
+		        ["ListColors"] = Constants.Colors.ListColors,
+		        ["TaskColors"] = Constants.Colors.TaskColors,
+		        ["CompletedColor"] = Constants.Colors.CompletedColor,
+		        ["InverseBoolConverter"] = new InverseBoolConverter(),
+		        ["TaskListToAlphaConverter"] = new TaskListToAlphaConverter()
+		    };
+
+            SetupIoc();
+                
+		    SetMainPage();
 		}
 
 		protected override void OnStart ()
@@ -30,5 +45,20 @@ namespace Xamrealm
 		{
 			// Handle when your app resumes
 		}
+
+	    public void SetMainPage()
+	    {
+	        var taskListsPage = FreshPageModelResolver.ResolvePageModel<TaskListsViewModel>();
+	        var taskListsContainer = new FreshNavigationContainer(taskListsPage, NavigationContainerNames.MainContainer);
+
+	        MainPage = taskListsContainer;
+	    }
+
+        private static void SetupIoc()
+	    {
+	        FreshTinyIOCBuiltIn.Current.Register<LoginViewModel>();
+	        FreshTinyIOCBuiltIn.Current.Register<TasksViewModel>();
+	        FreshTinyIOCBuiltIn.Current.Register<TaskListsViewModel>();
+        }
 	}
 }
