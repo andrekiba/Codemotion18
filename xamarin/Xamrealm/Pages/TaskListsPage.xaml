@@ -7,10 +7,18 @@
              xmlns:controls="clr-namespace:Xamrealm.Controls;assembly=Xamrealm"
              xmlns:behaviors="clr-namespace:Xamrealm.Behaviors;assembly=Xamrealm"
              xmlns:local="clr-namespace:Xamrealm.Models;assembly=Xamrealm"
+             xmlns:converters="clr-namespace:Xamrealm.Converters;assembly=Xamrealm"
              mc:Ignorable="d"
              x:Class="Xamrealm.Pages.TaskListsPage"
              Title="Tasks"
              d:BindingContext="{x:Static base:DesignViewModelLocator.TaskListsViewModel}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <converters:TaskListToAlphaConverter x:Key="TaskListToAlphaConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding AddTaskListCommand}" Icon="add.png"/>

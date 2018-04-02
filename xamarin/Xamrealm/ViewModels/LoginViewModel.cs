@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Input;
 using Acr.UserDialogs;
 using Realms;
@@ -11,17 +10,16 @@ using Credentials = Realms.Sync.Credentials;
 
 namespace Xamrealm.ViewModels
 {
-    public class LoginViewModel : BaseViewModel, IPromptable<User>
+    public class LoginViewModel : BaseViewModel
     {
         #region Properties
 
         public LoginInfo LoginInfo { get; }
         public string Password { get; set; }
-        public Action<User> Success { get; set; }
-        public Action Cancel { get; set; }
-        public Action<Exception> Error { get; set; }
 
         #endregion
+
+        #region Lifecycle
 
         public LoginViewModel()
         {
@@ -44,6 +42,13 @@ namespace Xamrealm.ViewModels
 
             LoginInfo = loginInfo;
         }
+
+        public override void Init(object initData)
+        {
+            base.Init(initData);
+        }
+
+        #endregion
 
         #region Commands
 
@@ -72,7 +77,7 @@ namespace Xamrealm.ViewModels
                 var credentials = Credentials.UsernamePassword(LoginInfo.Username, Password, false);
                 var user = await User.LoginAsync(credentials, Constants.Server.AuthServerUri);
 
-                Success(user);
+                CoreMethods.SwitchOutRootNavigation(NavigationContainerNames.MainContainer);
             },
             onError: async ex =>
             {

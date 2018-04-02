@@ -15,7 +15,7 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
+    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -94,7 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xamrealm\Xamrealm.csproj">
-      <Project>{9090BCDC-3013-4E41-9D7F-E8E68E119E29}</Project>
+      <Project>{31E83732-A451-4858-949A-39495BDB15CD}</Project>
       <Name>Xamrealm</Name>
     </ProjectReference>
   </ItemGroup>

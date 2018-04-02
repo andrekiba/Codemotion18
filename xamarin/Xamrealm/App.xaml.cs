@@ -1,7 +1,7 @@
 ﻿using FreshMvvm;
+using Realms.Sync;
 using Xamarin.Forms;
 using Xamrealm.Base;
-using Xamrealm.Converters;
 using Xamrealm.ViewModels;
 using Constants = Xamrealm.Base.Constants;
 
@@ -21,14 +21,12 @@ namespace Xamrealm
 		    {
 		        ["ListColors"] = Constants.Colors.ListColors,
 		        ["TaskColors"] = Constants.Colors.TaskColors,
-		        ["CompletedColor"] = Constants.Colors.CompletedColor,
-		        ["InverseBoolConverter"] = new InverseBoolConverter(),
-		        ["TaskListToAlphaConverter"] = new TaskListToAlphaConverter()
+		        ["CompletedColor"] = Constants.Colors.CompletedColor
 		    };
 
             SetupIoc();
                 
-		    SetMainPage();
+		    SetStartPage();
 		}
 
 		protected override void OnStart ()
@@ -46,12 +44,16 @@ namespace Xamrealm
 			// Handle when your app resumes
 		}
 
-	    public void SetMainPage()
+	    public void SetStartPage()
 	    {
 	        var taskListsPage = FreshPageModelResolver.ResolvePageModel<TaskListsViewModel>();
 	        var taskListsContainer = new FreshNavigationContainer(taskListsPage, NavigationContainerNames.MainContainer);
 
-	        MainPage = taskListsContainer;
+	        var loginPage = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
+	        var loginContainer = new FreshNavigationContainer(loginPage, NavigationContainerNames.LoginContainer);
+
+            var realmUser = User.Current;
+	        MainPage = realmUser == null ? loginContainer : taskListsContainer;
 	    }
 
         private static void SetupIoc()

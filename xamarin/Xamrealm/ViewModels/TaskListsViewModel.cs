@@ -14,23 +14,12 @@ namespace Xamrealm.ViewModels
 {
     public class TaskListsViewModel : BaseViewModel
     {
-        #region Fields
-
-        private User user;
-
-        #endregion
-
         #region Properties
         public IList<TaskList> TaskLists { get; set; }
         
         #endregion
 
         #region Lifecycle
-
-        public TaskListsViewModel()
-        {
-            
-        }
 
         protected override void ViewIsAppearing(object sender, EventArgs e)
         {
@@ -62,36 +51,12 @@ namespace Xamrealm.ViewModels
 
         #region Methods
 
-        protected async void Initialize()
+        private void Initialize()
         {
-            user = null;
+            var user = User.Current;
 
-            try
-            {
-                user = User.Current;
-            }
-            catch (Exception ex)
-            {
-                LogException(ex);
-            }
-
-            if (user == null)
-            {
-                try
-                {
-                    user = await Prompt<LoginViewModel, User>();
-                    
-                }
-                catch (Exception ex)
-                {
-                    LogException(ex);
-                }
-            }
-            else
-            {
-                var uri = user.ServerUri;
-                Constants.Server.SyncHost = $"{uri.Host}:{uri.Port}";
-            }
+            var uri = user.ServerUri;
+            Constants.Server.SyncHost = $"{uri.Host}:{uri.Port}";            
 
             try
             {
@@ -173,10 +138,11 @@ namespace Xamrealm.ViewModels
                 });
         }
 
-        private static async void Logout()
+        private async void Logout()
         {
             await User.Current.LogOutAsync();
-            App.Instance.SetMainPage();
+            //App.Instance.SetStartPage();
+            CoreMethods.SwitchOutRootNavigation(NavigationContainerNames.LoginContainer);
         }
 
         #endregion

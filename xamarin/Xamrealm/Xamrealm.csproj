@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove=".DS_Store" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.0.1" />
     <PackageReference Include="FreshMvvm" Version="2.2.4" />
     <PackageReference Include="PropertyChanged.Fody" Version="2.2.10" />
@@ -34,9 +38,5 @@
     <EmbeddedResource Update="Pages\TasksPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Cells\" />
   </ItemGroup>
 </Project>
