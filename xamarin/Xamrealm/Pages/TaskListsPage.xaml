@@ -47,9 +47,9 @@
                     </ViewCell.ContextActions>
                     <Grid Opacity="{Binding ., Converter={StaticResource TaskListToAlphaConverter}}">
                         <Grid.Behaviors>
-                            <behaviors:ItemColoringBehavior x:TypeArguments="local:TaskList"
+                            <behaviors:BoardColoringBehavior x:TypeArguments="local:TaskList"
                                     RealmCollection="{Binding ItemsSource, Source={x:Reference TaskListsListView}}"
-                                    Colors="{StaticResource ListColors}"
+                                    BoardColors="{StaticResource BoardColors}"
 									CompletedColor="{StaticResource CompletedColor}"/>
                         </Grid.Behaviors>
 
@@ -66,7 +66,7 @@
 									Text = "{Binding Title}"
 									TextColor="White"
 									HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                                    IsStrikeThrough="{Binding IsCompleted}"
+                                    IsStrikeThrough="{Binding Done}"
 								    Grid.RowSpan="2"/>
 
                         <BoxView Color="White" 
@@ -80,7 +80,7 @@
 									BackgroundColor="Transparent"
 									BorderColor="Transparent"
 									HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-									IsEnabled="{Binding IsCompleted, Converter={StaticResource InverseBoolConverter}}"
+									IsEnabled="{Binding Done, Converter={StaticResource InverseBoolConverter}}"
 									Grid.Column="1" Grid.RowSpan="2" />
 
                         <BoxView Color="Black"

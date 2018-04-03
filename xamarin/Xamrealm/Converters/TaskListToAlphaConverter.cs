@@ -9,7 +9,7 @@ namespace Xamrealm.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is TaskList list && !list.IsCompleted && list.Tasks.Count == 0)
+            if (value is TaskList list && !list.Done && list.Tasks.Count == 0)
                 return 0.9;
             
             return 1;

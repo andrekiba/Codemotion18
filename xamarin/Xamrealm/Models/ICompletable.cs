@@ -2,6 +2,6 @@
 {
     public interface ICompletable
     {
-        bool IsCompleted { get; }
+        bool Done { get; }
     }
 }

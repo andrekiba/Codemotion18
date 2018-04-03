@@ -116,8 +116,8 @@ namespace Xamrealm.ViewModels
             {
                 Realm.Write(() =>
                 {
-                    list.IsCompleted = !list.IsCompleted;
-                    var index = list.IsCompleted ? TaskLists.Count : TaskLists.Count(t => !t.IsCompleted);
+                    list.Done = !list.Done;
+                    var index = list.Done ? TaskLists.Count : TaskLists.Count(t => !t.Done);
 
                     TaskLists.Move(list, index - 1);
                 });

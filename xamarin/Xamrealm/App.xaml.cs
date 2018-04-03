@@ -19,8 +19,8 @@ namespace Xamrealm
 
             Resources = new ResourceDictionary
 		    {
-		        ["ListColors"] = Constants.Colors.ListColors,
-		        ["TaskColors"] = Constants.Colors.TaskColors,
+		        ["BoardColors"] = Constants.Colors.BoardColors,
+		        ["CardColors"] = Constants.Colors.CardColors,
 		        ["CompletedColor"] = Constants.Colors.CompletedColor
 		    };
 
