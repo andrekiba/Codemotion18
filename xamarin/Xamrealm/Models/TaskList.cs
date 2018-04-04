@@ -16,7 +16,10 @@ namespace Xamrealm.Models
         public string Title { get; set; } = string.Empty;
 
         [MapTo("completed")]
-        public bool Done { get; set; }
+        public bool IsCompleted { get; set; }
+
+        [MapTo("color")]
+        public string Color { get; set; }
 
         [MapTo("tasks")]
         public IList<Task> Tasks { get; }

@@ -65,7 +65,7 @@ namespace Xamrealm.Behaviors
             try
             {
                 Color backgroundColor;
-                if (item.Done)
+                if (item.IsCompleted)
                 {
                     backgroundColor = CompletedColor;
                 }

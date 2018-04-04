@@ -78,7 +78,7 @@ namespace Xamrealm.ViewModels
                     parent = Realm.Add(new TaskListCollection());
                     parent.TaskLists.Add(new TaskList
                     {
-                        Id = Constants.DefaultListId,
+                        Id = Constants.DefaultTaskListId,
                         Title = Constants.DefaultListName
                     });
                 });
@@ -116,8 +116,8 @@ namespace Xamrealm.ViewModels
             {
                 Realm.Write(() =>
                 {
-                    list.Done = !list.Done;
-                    var index = list.Done ? TaskLists.Count : TaskLists.Count(t => !t.Done);
+                    list.IsCompleted = !list.IsCompleted;
+                    var index = list.IsCompleted ? TaskLists.Count : TaskLists.Count(t => !t.IsCompleted);
 
                     TaskLists.Move(list, index - 1);
                 });

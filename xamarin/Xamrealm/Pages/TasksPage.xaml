@@ -38,16 +38,15 @@
                     </ViewCell.ContextActions>
                     <Grid>
                         <Grid.Behaviors>
-                            <behaviors:ItemColoringBehavior x:TypeArguments="local:Task"
-                                                        RealmCollection="{Binding ItemsSource, Source={x:Reference TasksListView}}"
-                                                        Colors="{StaticResource CardColors}"
-                                                        CompletedColor="{StaticResource CompletedColor}"/>
+                            <behaviors:TaskListColoringBehavior x:TypeArguments="local:Task"
+                                                                RealmCollection="{Binding ItemsSource, Source={x:Reference TasksListView}}"
+                                                                TaskListColor="{Binding TaskList.Color}"/>
                         </Grid.Behaviors>
                         <controls:TransparentEntry
                             Text="{Binding Title}"
                             TextColor="White"
                             VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-                            IsStrikeThrough="{Binding Done}"/>
+                            IsStrikeThrough="{Binding IsCompleted}"/>
                     </Grid>
                 </ViewCell>
             </DataTemplate>

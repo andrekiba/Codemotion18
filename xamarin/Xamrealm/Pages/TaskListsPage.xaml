@@ -38,24 +38,22 @@
                 <ViewCell x:Name="TaskListCell">
                     <ViewCell.ContextActions>
                         <MenuItem Text="Delete"
-									  IsDestructive="true"
-									  Command="{Binding Path=BindingContext.DeleteTaskListCommand, Source={x:Reference Name=TaskListsListView}}"
-                                      CommandParameter="{Binding .}" />
+								IsDestructive="true"
+								Command="{Binding Path=BindingContext.DeleteTaskListCommand, Source={x:Reference Name=TaskListsListView}}"
+                                CommandParameter="{Binding .}" />
                         <MenuItem Text="Complete"
-                                      Command="{Binding Path=BindingContext.CompleteTaskListCommand, Source={x:Reference Name=TaskListsListView}}"
-                                      CommandParameter="{Binding .}" />
+                                Command="{Binding Path=BindingContext.CompleteTaskListCommand, Source={x:Reference Name=TaskListsListView}}"
+                                CommandParameter="{Binding .}" />
                     </ViewCell.ContextActions>
                     <Grid Opacity="{Binding ., Converter={StaticResource TaskListToAlphaConverter}}">
                         <Grid.Behaviors>
-                            <behaviors:BoardColoringBehavior x:TypeArguments="local:TaskList"
-                                    RealmCollection="{Binding ItemsSource, Source={x:Reference TaskListsListView}}"
-                                    BoardColors="{StaticResource BoardColors}"
-									CompletedColor="{StaticResource CompletedColor}"/>
+                            <behaviors:TaskListColoringBehavior x:TypeArguments="local:TaskList"
+                                                                RealmCollection="{Binding ItemsSource, Source={x:Reference TaskListsListView}}"/>
                         </Grid.Behaviors>
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width = "*" />
-                            <ColumnDefinition Width = "60" />
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -63,10 +61,10 @@
                         </Grid.RowDefinitions>
 
                         <controls:TransparentEntry 
-									Text = "{Binding Title}"
+									Text="{Binding Title}"
 									TextColor="White"
 									HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                                    IsStrikeThrough="{Binding Done}"
+                                    IsStrikeThrough="{Binding IsCompleted}"
 								    Grid.RowSpan="2"/>
 
                         <BoxView Color="White" 
@@ -80,7 +78,7 @@
 									BackgroundColor="Transparent"
 									BorderColor="Transparent"
 									HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-									IsEnabled="{Binding Done, Converter={StaticResource InverseBoolConverter}}"
+									IsEnabled="{Binding IsCompleted, Converter={StaticResource InverseBoolConverter}}"
 									Grid.Column="1" Grid.RowSpan="2" />
 
                         <BoxView Color="Black"

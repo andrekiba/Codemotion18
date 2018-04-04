@@ -8,7 +8,10 @@ namespace Xamrealm.Models
         [Required]
         public string Title { get; set; } = string.Empty;
 
+        [MapTo("color")]
+        public string Color { get; set; }
+
         [MapTo("completed")]
-        public bool Done { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }

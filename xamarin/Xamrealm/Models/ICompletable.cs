@@ -2,6 +2,8 @@
 {
     public interface ICompletable
     {
-        bool Done { get; }
+        bool IsCompleted { get; }
+
+        string Color { get; set; }
     }
 }

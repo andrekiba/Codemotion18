@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Realms;
 using Xamarin.Forms;
 using Xamrealm.Base;
@@ -9,13 +8,13 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Xamrealm.Behaviors
 {
-    public class CardColoringBehavior<T> : Behavior<View> where T : RealmObject, ICompletable
+    public class TaskListColoringBehavior<T> : Behavior<View> where T : RealmObject, ICompletable
     {
         private IDisposable notificationToken;
         private WeakReference<View> view;
 
         public static BindableProperty RealmCollectionProperty =
-            BindableProperty.Create(nameof(RealmCollection), typeof(IList<T>), typeof(CardColoringBehavior<T>), propertyChanged: OnRealmCollectionChanged);
+            BindableProperty.Create(nameof(RealmCollection), typeof(IList<T>), typeof(TaskListColoringBehavior<T>), propertyChanged: OnRealmCollectionChanged);
 
         public IList<T> RealmCollection
         {
@@ -27,15 +26,18 @@ namespace Xamrealm.Behaviors
             }
         }
 
-        public Color BoardColor { get; set; }
+        public static BindableProperty TaskListColorProperty =
+            BindableProperty.Create(nameof(TaskListColor), typeof(string), typeof(TaskListColoringBehavior<T>));
 
-        public Color CompletedColor { get; set; }
-
-        private Color[] cardColors = new Color[10];
+        public string TaskListColor
+        {
+            get => (string) GetValue(TaskListColorProperty);
+            set => SetValue(TaskListColorProperty, value);
+        }
 
         private static void OnRealmCollectionChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var self = (CardColoringBehavior<T>)bindable;
+            var self = (TaskListColoringBehavior<T>)bindable;
             self.notificationToken?.Dispose();
 
             var newCollection = newValue as IRealmCollection<T>;
@@ -69,13 +71,25 @@ namespace Xamrealm.Behaviors
             try
             {
                 Color backgroundColor;
-                if (item.Done)
-                    backgroundColor = CompletedColor;
+                if (item.IsCompleted)
+                    backgroundColor = Constants.Colors.CompletedColor;
                 else
                 {
                     var index = RealmCollection.IndexOf(item);
-                    var fraction = index / (double)Math.Max(13, RealmCollection.Count);
-                    backgroundColor = GradientColorAtFraction(fraction);
+                    var count = RealmCollection.Count;
+
+                    if (item is TaskList)
+                    {
+                        var colors = Constants.Colors.TaskListColors;
+                        backgroundColor = colors[(count - index - 1) % colors.Count];
+                    }
+                    else
+                    {
+                        var shades = Constants.Colors.TaskColorsByTaskList["#FF673AB7"];                       
+                        backgroundColor = shades[(count - index - 1) % shades.Count];
+                    }
+
+                    //item.Realm.Write(() => { item.Color = backgroundColor.ToHexString(); });
                 }
 
                 sameView.BackgroundColor = backgroundColor;
@@ -83,35 +97,8 @@ namespace Xamrealm.Behaviors
             catch
             {
                 // Let's not crash because of a coloring fail :)
+                Console.WriteLine("Problem on saving color!");
             }
-        }
-
-        private Color GradientColorAtFraction(double fraction)
-        {
-            // Ensure offset is normalized to 1
-            var normalizedOffset = Math.Max(Math.Min(fraction, 1), 0);
-
-            // Work out the 'size' that each color stop spans
-            var colorStopRange = 1.0 / (cardColors.Length - 1);
-
-            // Determine the base stop our offset is within
-            var colorRangeIndex = (int)Math.Floor(normalizedOffset / colorStopRange);
-
-            // Get the initial color which will serve as the origin
-            var topColor = cardColors[colorRangeIndex];
-            var fromColors = new[] { topColor.R, topColor.G, topColor.B };
-
-            // Get the destination color we will lerp to
-            var bottomColor = cardColors[colorRangeIndex + 1];
-            var toColors = new[] { bottomColor.R, bottomColor.G, bottomColor.B };
-
-            // Work out the actual percentage we need to lerp, inside just that stop range
-            var stopOffset = (normalizedOffset - colorRangeIndex * colorStopRange) / colorStopRange;
-
-            return new Color(
-                fromColors[0] + stopOffset * (toColors[0] - fromColors[0]),
-                fromColors[1] + stopOffset * (toColors[1] - fromColors[1]),
-                fromColors[2] + stopOffset * (toColors[2] - fromColors[2]));
         }
     }
 }
