@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Input;
 using Realms;
+using Remotion.Linq.Utilities;
 using Xamarin.Forms;
 using Xamrealm.Base;
 using Xamrealm.Models;
@@ -15,6 +16,9 @@ namespace Xamrealm.ViewModels
 
         public TaskList TaskList { get; private set; }
 
+        public int TaskListIndex { get; private set; }
+        public int TaskListCount { get; private set; }
+
         #endregion
 
         public override void Init(object initData)
@@ -22,12 +26,12 @@ namespace Xamrealm.ViewModels
             var init = (TasksInitDTO) initData;
             Realm = init.Realm;
             TaskList = Realm.Find<TaskList>(init.IdTaskList);
-            RaisePropertyChanged(nameof(TaskList));
-        }
+            TaskListIndex = init.TaskListIndex;
+            TaskListCount = init.TaskListCount;
 
-        protected override void ViewIsAppearing(object sender, EventArgs e)
-        {
-            base.ViewIsAppearing(sender, e);
+            RaisePropertyChanged(nameof(TaskList));
+            //RaisePropertyChanged(nameof(TaskListIndex));
+            //RaisePropertyChanged(nameof(TaskListCount));
         }
 
         #region Commands
@@ -52,6 +56,7 @@ namespace Xamrealm.ViewModels
                 Realm.Write(() =>
                 {
                     Realm.Remove(task);
+                    TaskList.IsCompleted = TaskList.Tasks.Any(t => !t.IsCompleted) == false;
                 });
             }
         }
@@ -64,8 +69,9 @@ namespace Xamrealm.ViewModels
                 {
                     task.IsCompleted = !task.IsCompleted;
                     var index = task.IsCompleted ? TaskList.Tasks.Count : TaskList.Tasks.Count(t => !t.IsCompleted);
-
                     TaskList.Tasks.Move(task, index - 1);
+
+                    TaskList.IsCompleted = TaskList.Tasks.Any(t => !t.IsCompleted) == false;
                 });
             }
         }
@@ -75,6 +81,8 @@ namespace Xamrealm.ViewModels
             Realm.Write(() =>
             {
                 TaskList.Tasks.Insert(0, new Task());
+                if (TaskList.IsCompleted)
+                    TaskList.IsCompleted = false;
             });
         }
 

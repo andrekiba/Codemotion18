@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Realms;
 using Xamarin.Forms;
 using Xamrealm.Base;
 using Xamrealm.Models;
 using TTask = System.Threading.Tasks.Task;
+using Task = Xamrealm.Models.Task;
 
 namespace Xamrealm.Behaviors
 {
-    public class TaskListColoringBehavior : Behavior<View>
-    {
+    public class TaskColoringBehavior : Behavior<View>
+    { 
         private IDisposable notificationToken;
         private WeakReference<View> view;
 
         public static BindableProperty RealmCollectionProperty =
-            BindableProperty.Create(nameof(RealmCollection), typeof(IList<TaskList>), typeof(TaskListColoringBehavior), propertyChanged: OnRealmCollectionChanged);
+            BindableProperty.Create(nameof(RealmCollection), typeof(IList<Task>), typeof(TaskColoringBehavior), propertyChanged: OnRealmCollectionChanged);
 
-        public IList<TaskList> RealmCollection
+        public IList<Task> RealmCollection
         {
-            get => (IList<TaskList>)GetValue(RealmCollectionProperty);
+            get => (IList<Task>)GetValue(RealmCollectionProperty);
             set
             {
                 SetValue(RealmCollectionProperty, value);
@@ -26,12 +28,28 @@ namespace Xamrealm.Behaviors
             }
         }
 
+        public static BindableProperty TaskListIndexProperty = BindableProperty.Create(nameof(TaskListIndex), typeof(int), typeof(TaskColoringBehavior), default(int));
+
+        public int TaskListIndex
+        {
+            get => (int)GetValue(TaskListIndexProperty);
+            set => SetValue(TaskListIndexProperty, value);
+        }
+
+        public static BindableProperty TaskListCountProperty = BindableProperty.Create(nameof(TaskListCount), typeof(int), typeof(TaskColoringBehavior), default(int));
+
+        public int TaskListCount
+        {
+            get => (int)GetValue(TaskListCountProperty);
+            set => SetValue(TaskListCountProperty, value);
+        }
+
         private static void OnRealmCollectionChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var self = (TaskListColoringBehavior)bindable;
+            var self = (TaskColoringBehavior)bindable;
             self.notificationToken?.Dispose();
 
-            var newCollection = newValue as IRealmCollection<TaskList>;
+            var newCollection = newValue as IRealmCollection<Task>;
             self.notificationToken = newCollection?.SubscribeForNotifications((sender, changes, error) => { self.CalculateColor(); });
         }
 
@@ -56,8 +74,8 @@ namespace Xamrealm.Behaviors
             // HACK: yield control to avoid a race condition where things might not be initialized yet, resulting in no color being applied
             await TTask.Delay(1);
             View sameView = null;
-            TaskList item;
-            if (RealmCollection == null || view?.TryGetTarget(out sameView) != true || (item = sameView.BindingContext as TaskList) == null)
+            Task item;
+            if (RealmCollection == null || view?.TryGetTarget(out sameView) != true || (item = sameView.BindingContext as Task) == null)
                 return;
             try
             {
@@ -69,8 +87,9 @@ namespace Xamrealm.Behaviors
                     var index = RealmCollection.IndexOf(item);
                     var count = RealmCollection.Count;
                     var colors = Constants.Colors.TaskListColors;
-               
-                    backgroundColor = colors[(count - index - 1) % colors.Count];
+                      
+                    var shades = Constants.Colors.TaskColors[(TaskListCount - TaskListIndex - 1) % colors.Count];
+                    backgroundColor = shades[(count - index - 1) % shades.Count];                
                 }
 
                 sameView.BackgroundColor = backgroundColor;

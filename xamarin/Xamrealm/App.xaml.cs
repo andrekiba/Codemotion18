@@ -20,7 +20,7 @@ namespace Xamrealm
             Resources = new ResourceDictionary
 		    {
 		        ["TaskListColors"] = Constants.Colors.TaskListColors,
-		        ["TaskColors"] = Constants.Colors.TaskColorsByTaskList,
+		        ["TaskColors"] = Constants.Colors.TaskColors,
 		        ["CompletedColor"] = Constants.Colors.CompletedColor
 		    };
 

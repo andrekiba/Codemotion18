@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,10 +7,17 @@
              xmlns:controls="clr-namespace:Xamrealm.Controls;assembly=Xamrealm"
              xmlns:behaviors="clr-namespace:Xamrealm.Behaviors;assembly=Xamrealm"
              xmlns:local="clr-namespace:Xamrealm.Models;assembly=Xamrealm"
+             xmlns:converters="clr-namespace:Xamrealm.Converters;assembly=Xamrealm"
              mc:Ignorable="d"
              x:Class="Xamrealm.Pages.TasksPage"
              Title="{Binding TaskList.Title}"
              d:BindingContext="{x:Static base:DesignViewModelLocator.TasksViewModel}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:CompleteRestoreConverter x:Key="CompleteRestoreConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding AddTaskCommand}" Icon="add.png"/>
@@ -32,15 +39,15 @@
                                   IsDestructive="true"
                                   Command="{Binding Path=BindingContext.DeleteTaskCommand, Source={x:Reference Name=TasksListView}}"
                                   CommandParameter="{Binding .}" />
-                        <MenuItem Text="Complete"
+                        <MenuItem Text="{Binding IsCompleted, Converter={StaticResource CompleteRestoreConverter}}"
                                   Command="{Binding Path=BindingContext.CompleteTaskCommand, Source={x:Reference Name=TasksListView}}"
                                   CommandParameter="{Binding .}" />
                     </ViewCell.ContextActions>
                     <Grid>
                         <Grid.Behaviors>
-                            <behaviors:TaskListColoringBehavior x:TypeArguments="local:Task"
-                                                                RealmCollection="{Binding ItemsSource, Source={x:Reference TasksListView}}"
-                                                                TaskListColor="{Binding TaskList.Color}"/>
+                            <behaviors:TaskColoringBehavior RealmCollection="{Binding ItemsSource, Source={x:Reference TasksListView}}"
+                                                            TaskListIndex="{Binding Path=BindingContext.TaskListIndex, Source={x:Reference Name=TasksListView}}"
+                                                            TaskListCount="{Binding Path=BindingContext.TaskListCount, Source={x:Reference Name=TasksListView}}"/>
                         </Grid.Behaviors>
                         <controls:TransparentEntry
                             Text="{Binding Title}"

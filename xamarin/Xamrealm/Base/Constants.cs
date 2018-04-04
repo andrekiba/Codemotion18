@@ -7,7 +7,7 @@ namespace Xamrealm.Base
 {
     public static class Constants
     {
-        public const string DefaultListName = "Default Board";
+        public const string DefaultTaskListName = "Default List";
         public const string DefaultTaskListId = "80EB1620-165B-4600-A1B1-D97032FDD9A0";
 
         public static class Server
@@ -44,21 +44,15 @@ namespace Xamrealm.Base
                 Color.FromHex("#607D8B"), //Blue Grey
             };
 
-            public static readonly Dictionary<string, List<Color>> TaskColorsByTaskList = GenerateTaskColorsByTaskList();
-           
-            public static readonly Color CompletedColor = new Color(51 / 255.0, 51 / 255.0, 51 / 255.0);
-
-            private static Dictionary<string, List<Color>> GenerateTaskColorsByTaskList()
-            {
-                var test = TaskListColors.Select(x => new
+            public static readonly Dictionary<int, List<Color>> TaskColors = TaskListColors.Select(x => new
                 {
-                    TaskListColor = x.ToHexString(),
-                    TaskColors = x.GenerateShades()              
+                    Key = TaskListColors.IndexOf(x),
+                    Value = x.GenerateShades(10)
                 })
-                .ToDictionary(x => x.TaskListColor, y => y.TaskColors);
+                .ToDictionary(x => x.Key, y => y.Value);
 
-                return test;
-            } 
+            public static readonly Color CompletedColor = new Color(0.2, 0.2, 0.2);
+
         }        
     }
 }

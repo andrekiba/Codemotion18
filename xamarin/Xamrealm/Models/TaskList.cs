@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Realms;
+using Xamarin.Forms;
 
 namespace Xamrealm.Models
 {
@@ -17,9 +18,6 @@ namespace Xamrealm.Models
 
         [MapTo("completed")]
         public bool IsCompleted { get; set; }
-
-        [MapTo("color")]
-        public string Color { get; set; }
 
         [MapTo("tasks")]
         public IList<Task> Tasks { get; }

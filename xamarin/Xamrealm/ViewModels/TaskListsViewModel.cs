@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using Acr.UserDialogs;
 using Realms;
 using Realms.Sync;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 using Xamrealm.Base;
 using Xamrealm.Models;
 using Xamrealm.Models.DTO;
@@ -79,7 +81,7 @@ namespace Xamrealm.ViewModels
                     parent.TaskLists.Add(new TaskList
                     {
                         Id = Constants.DefaultTaskListId,
-                        Title = Constants.DefaultListName
+                        Title = Constants.DefaultTaskListName
                     });
                 });
 
@@ -117,8 +119,8 @@ namespace Xamrealm.ViewModels
                 Realm.Write(() =>
                 {
                     list.IsCompleted = !list.IsCompleted;
+                    list.Tasks.ForEach(t => t.IsCompleted = list.IsCompleted);
                     var index = list.IsCompleted ? TaskLists.Count : TaskLists.Count(t => !t.IsCompleted);
-
                     TaskLists.Move(list, index - 1);
                 });
             }
@@ -133,15 +135,19 @@ namespace Xamrealm.ViewModels
                     await CoreMethods.PushPageModel<TasksViewModel>(new TasksInitDTO
                     {
                         Realm = Realm,
-                        IdTaskList = list.Id
+                        IdTaskList = list.Id,
+                        TaskListIndex = TaskLists.IndexOf(list),
+                        TaskListCount = TaskLists.Count
                     });
                 });
         }
 
         private async void Logout()
         {
+            var ok = await UserDialogs.Instance.ConfirmAsync("Do you really want to logout?", "Warning!", "OK", "Cancel");
+            if (!ok)
+                return;
             await User.Current.LogOutAsync();
-            //App.Instance.SetStartPage();
             CoreMethods.SwitchOutRootNavigation(NavigationContainerNames.LoginContainer);
         }
 
