@@ -13,6 +13,5 @@ namespace Xamrealm.Base
 
         private static TasksViewModel tasksViewModel;
         public static TasksViewModel TasksViewModel => tasksViewModel ?? (tasksViewModel = FreshIOC.Container.Resolve<TasksViewModel>());
-
     }
 }

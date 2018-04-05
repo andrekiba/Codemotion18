@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ignore="http://www.galasoft.ch/ignore"
              xmlns:base="clr-namespace:Xamrealm.Base;assembly=Xamrealm"
-             mc:Ignorable="d"
+             mc:Ignorable="d ignore"
              x:Class="Xamrealm.Pages.LoginPage"
              Title="Login"
              d:BindingContext="{x:Static base:DesignViewModelLocator.LoginViewModel}">

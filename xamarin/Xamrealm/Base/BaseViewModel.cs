@@ -49,26 +49,5 @@ namespace Xamrealm.Base
         {
             Console.WriteLine(ex);
         }
-
-        protected async Task<TResult> Prompt<TViewModel, TResult>() where TViewModel : BaseViewModel, IPromptable<TResult>
-        {
-            var page = FreshPageModelResolver.ResolvePageModel<TViewModel>();
-            var promptable = (TViewModel)page.BindingContext;
-            var tcs = new TaskCompletionSource<TResult>();
-            promptable.Success = tcs.SetResult;
-            promptable.Cancel = tcs.SetCanceled;
-            promptable.Error = tcs.SetException;
-
-            await CoreMethods.PushPageModel<TViewModel>(null, true);
-
-            try
-            {
-                return await tcs.Task;
-            }
-            finally
-            {
-                await CoreMethods.PopPageModel(true);
-            }
-        }
     } 
 }

@@ -3,7 +3,7 @@ using Realms;
 
 namespace Xamrealm.Models
 {
-    public class TaskListCollection : RealmObject
+    public class Board : RealmObject
     {
         [PrimaryKey]
         [MapTo("id")]

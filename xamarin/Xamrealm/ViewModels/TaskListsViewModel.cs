@@ -64,28 +64,26 @@ namespace Xamrealm.ViewModels
             {
                 var config = new SyncConfiguration(user, Constants.Server.SyncServerUri)
                 {
-                    ObjectClasses = new[] { typeof(Task), typeof(TaskList), typeof(TaskListCollection) }
+                    //ObjectClasses = new[] {typeof(Board), typeof(TaskList), typeof(Task), typeof(Vote)}
                 };
 
                 Realm = Realm.GetInstance(config);
 
-                TaskListCollection parent = null;
+                var board = Realm.Find<Board>(0);
+                if (board != null)
+                    return;
+
                 Realm.Write(() =>
                 {
-                    // Eagerly acquire write-lock to ensure we don't get into
-                    // race conditions with sync writing data in the background
-                    parent = Realm.Find<TaskListCollection>(0);
-                    if (parent != null)
-                        return;
-                    parent = Realm.Add(new TaskListCollection());
-                    parent.TaskLists.Add(new TaskList
+                    board = Realm.Add(new Board());
+                    board.TaskLists.Add(new TaskList
                     {
                         Id = Constants.DefaultTaskListId,
                         Title = Constants.DefaultTaskListName
                     });
                 });
 
-                TaskLists = parent.TaskLists;
+                TaskLists = board.TaskLists;
             }
             catch (Exception ex)
             {
@@ -107,6 +105,7 @@ namespace Xamrealm.ViewModels
             {
                 Realm.Write(() =>
                 {
+                    list.Tasks.ForEach(t => Realm.Remove(t));
                     Realm.Remove(list);
                 });
             }

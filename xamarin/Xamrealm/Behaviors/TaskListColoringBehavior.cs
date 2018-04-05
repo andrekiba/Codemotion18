@@ -53,7 +53,7 @@ namespace Xamrealm.Behaviors
 
         private async void CalculateColor()
         {
-            // HACK: yield control to avoid a race condition where things might not be initialized yet, resulting in no color being applied
+            // HACK: yield control to avoid a race condition
             await TTask.Delay(1);
             View sameView = null;
             TaskList item;
@@ -78,7 +78,7 @@ namespace Xamrealm.Behaviors
             catch
             {
                 // Let's not crash because of a coloring fail :)
-                Console.WriteLine("Problem on saving color!");
+                Console.WriteLine("Problem on calculating color!");
             }
         }
     }

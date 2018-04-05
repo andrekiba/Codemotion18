@@ -9,6 +9,7 @@ namespace Xamrealm.Models.DTO
         public string IdTaskList { get; set; }
 
         public int TaskListIndex { get; set; }
+
         public int TaskListCount { get; set; }
     }
 }

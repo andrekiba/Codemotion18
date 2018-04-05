@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.0.1" />
+    <PackageReference Include="AsyncErrorHandler.Fody" Version="1.1.0" />
     <PackageReference Include="FreshMvvm" Version="2.2.4" />
     <PackageReference Include="PropertyChanged.Fody" Version="2.2.10" />
     <PackageReference Include="Realm" Version="2.2.0" />
@@ -18,9 +19,6 @@
 
   <ItemGroup>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="App.xaml.cs">
-      <DependentUpon>*.xaml</DependentUpon>
-    </Compile>
-    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="MainPage.xaml.cs">
       <DependentUpon>*.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\TaskListsPage.xaml.cs">

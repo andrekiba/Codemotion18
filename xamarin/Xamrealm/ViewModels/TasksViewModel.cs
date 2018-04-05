@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Input;
 using Realms;
-using Remotion.Linq.Utilities;
+using Realms.Sync;
 using Xamarin.Forms;
 using Xamrealm.Base;
 using Xamrealm.Models;
@@ -15,7 +14,6 @@ namespace Xamrealm.ViewModels
         #region Properties
 
         public TaskList TaskList { get; private set; }
-
         public int TaskListIndex { get; private set; }
         public int TaskListCount { get; private set; }
 
@@ -30,8 +28,6 @@ namespace Xamrealm.ViewModels
             TaskListCount = init.TaskListCount;
 
             RaisePropertyChanged(nameof(TaskList));
-            //RaisePropertyChanged(nameof(TaskListIndex));
-            //RaisePropertyChanged(nameof(TaskListCount));
         }
 
         #region Commands
@@ -44,6 +40,9 @@ namespace Xamrealm.ViewModels
 
         private ICommand completeTaskCommand;
         public ICommand CompleteTaskCommand => completeTaskCommand ?? (completeTaskCommand = new Command<Task>(CompleteTask));
+
+        private ICommand voteTaskCommand;
+        public ICommand VoteTaskCommand => voteTaskCommand ?? (voteTaskCommand = new Command<Task>(VoteTask, t => !t.IsCompleted));
 
         #endregion
 
@@ -81,8 +80,27 @@ namespace Xamrealm.ViewModels
             Realm.Write(() =>
             {
                 TaskList.Tasks.Insert(0, new Task());
-                if (TaskList.IsCompleted)
-                    TaskList.IsCompleted = false;
+                TaskList.IsCompleted = false;
+            });
+        }
+
+        private void VoteTask(Task task)
+        {
+            if (task == null)
+                return;
+
+            var userIdentity = User.Current.Identity;
+
+            Realm.Write(() =>
+            {
+                var vote = task.Votes.FirstOrDefault(v => v.Identity == userIdentity);
+                if (vote == null)
+                    task.Votes.Add(new Vote { Identity = userIdentity });
+                else
+                {
+                    task.Votes.Remove(vote);
+                    Realm.Remove(vote);
+                }                  
             });
         }
 

@@ -43,11 +43,6 @@ namespace Xamrealm.ViewModels
             LoginInfo = loginInfo;
         }
 
-        public override void Init(object initData)
-        {
-            base.Init(initData);
-        }
-
         #endregion
 
         #region Commands
@@ -75,7 +70,7 @@ namespace Xamrealm.ViewModels
                 Constants.Server.SyncHost = LoginInfo.ServerUrl;
 
                 var credentials = Credentials.UsernamePassword(LoginInfo.Username, Password, false);
-                var user = await User.LoginAsync(credentials, Constants.Server.AuthServerUri);
+                await User.LoginAsync(credentials, Constants.Server.AuthServerUri);
 
                 CoreMethods.SwitchOutRootNavigation(NavigationContainerNames.MainContainer);
             },

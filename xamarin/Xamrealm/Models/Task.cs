@@ -1,5 +1,5 @@
-﻿using Realms;
-using Xamarin.Forms;
+﻿using System.Collections.Generic;
+using Realms;
 
 namespace Xamrealm.Models
 {
@@ -11,5 +11,8 @@ namespace Xamrealm.Models
 
         [MapTo("completed")]
         public bool IsCompleted { get; set; }
+
+        [MapTo("votes")]
+        public IList<Vote> Votes { get; }
     }
 }

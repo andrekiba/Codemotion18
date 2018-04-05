@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace Xamrealm.Base
 {
@@ -33,5 +34,23 @@ namespace Xamrealm.Base
         }
 
         public static string ToHexString(this Color color) => $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+    }
+
+    [ContentProperty("Source")]
+    public class ImageResourceExtension : IMarkupExtension
+    {
+        public string Source { get; set; }
+
+        public object ProvideValue(IServiceProvider serviceProvider)
+        {
+            if (Source == null)
+            {
+                return null;
+            }
+            // Do your translation lookup here, using whatever method you require
+            var imageSource = ImageSource.FromResource(Source);
+
+            return imageSource;
+        }
     }
 }

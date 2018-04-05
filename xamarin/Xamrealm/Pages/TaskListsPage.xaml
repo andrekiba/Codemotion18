@@ -3,14 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ignore="http://www.galasoft.ch/ignore"
              xmlns:base="clr-namespace:Xamrealm.Base;assembly=Xamrealm"
              xmlns:controls="clr-namespace:Xamrealm.Controls;assembly=Xamrealm"
              xmlns:behaviors="clr-namespace:Xamrealm.Behaviors;assembly=Xamrealm"
-             xmlns:local="clr-namespace:Xamrealm.Models;assembly=Xamrealm"
              xmlns:converters="clr-namespace:Xamrealm.Converters;assembly=Xamrealm"
-             mc:Ignorable="d"
+             mc:Ignorable="d ignore"
              x:Class="Xamrealm.Pages.TaskListsPage"
-             Title="Tasks"
+             Title="Board"
              d:BindingContext="{x:Static base:DesignViewModelLocator.TaskListsViewModel}">
 
     <ContentPage.Resources>
@@ -26,29 +26,31 @@
         <ToolbarItem Command="{Binding LogoutCommand}" Icon="exit.png"/>
     </ContentPage.ToolbarItems>
 
-    <ListView ItemsSource="{Binding TaskLists}" 
-				x:Name="TaskListsListView" 
-				RowHeight="60"
-                SeparatorVisibility="None"
-				BackgroundColor="Black">
+    <ListView x:Name="TaskListsControl"
+            ItemsSource="{Binding TaskLists}" 
+            RowHeight="60"
+            SeparatorVisibility="None"
+		    BackgroundColor="Black">
         <ListView.Behaviors>
             <behaviors:CellDeselectingBehavior />
         </ListView.Behaviors>
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell x:Name="TaskListCell">
+                    
                     <ViewCell.ContextActions>
                         <MenuItem Text="Delete"
 								IsDestructive="true"
-								Command="{Binding Path=BindingContext.DeleteTaskListCommand, Source={x:Reference Name=TaskListsListView}}"
+								Command="{Binding Path=BindingContext.DeleteTaskListCommand, Source={x:Reference Name=TaskListsControl}}"
                                 CommandParameter="{Binding .}" />
                         <MenuItem Text="{Binding IsCompleted, Converter={StaticResource CompleteRestoreConverter}}"
-                                Command="{Binding Path=BindingContext.CompleteTaskListCommand, Source={x:Reference Name=TaskListsListView}}"
+                                Command="{Binding Path=BindingContext.CompleteTaskListCommand, Source={x:Reference Name=TaskListsControl}}"
                                 CommandParameter="{Binding .}" />
                     </ViewCell.ContextActions>
+                    
                     <Grid Opacity="{Binding ., Converter={StaticResource TaskListToAlphaConverter}}">
                         <Grid.Behaviors>
-                            <behaviors:TaskListColoringBehavior RealmCollection="{Binding ItemsSource, Source={x:Reference TaskListsListView}}"/>
+                            <behaviors:TaskListColoringBehavior RealmCollection="{Binding ItemsSource, Source={x:Reference TaskListsControl}}"/>
                         </Grid.Behaviors>
 
                         <Grid.ColumnDefinitions>
@@ -60,31 +62,23 @@
                             <RowDefinition Height="1"/>
                         </Grid.RowDefinitions>
 
-                        <controls:TransparentEntry 
-									Text="{Binding Title}"
-									TextColor="White"
+                        <controls:TransparentEntry Grid.Row="0" Grid.RowSpan="2"
+                                    Text="{Binding Title}" TextColor="White"
 									HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                                    IsStrikeThrough="{Binding IsCompleted}"
-								    Grid.RowSpan="2"/>
+                                    IsStrikeThrough="{Binding IsCompleted}"/>
 
-                        <BoxView Color="White" 
-									Opacity="0.15"
-								    Grid.Column="1"
-									Grid.RowSpan="2"/>
-                        <Button Text="{Binding Tasks.Count}"
-                                    Command="{Binding Path=BindingContext.OpenTaskListCommand, Source={x:Reference Name=TaskListsListView}}"
-                                    CommandParameter="{Binding .}"
-									TextColor="White"
-									BackgroundColor="Transparent"
-									BorderColor="Transparent"
-									HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-									IsEnabled="{Binding IsCompleted, Converter={StaticResource InverseBoolConverter}}"
-									Grid.Column="1" Grid.RowSpan="2" />
+                        <BoxView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                                 Color="White" Opacity="0.15" />
 
-                        <BoxView Color="Black"
-									Opacity="0.01"
-									Grid.Row="1"
-									Grid.ColumnSpan="2"/>
+                        <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                                Text="{Binding Tasks.Count}"
+                                Command="{Binding Path=BindingContext.OpenTaskListCommand, Source={x:Reference Name=TaskListsControl}}"
+                                CommandParameter="{Binding .}"
+								TextColor="White" BackgroundColor="Transparent" BorderColor="Transparent"
+								HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+
+                        <BoxView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                 Color="Black" Opacity="0.01" />
                     </Grid>
                 </ViewCell>
             </DataTemplate>
