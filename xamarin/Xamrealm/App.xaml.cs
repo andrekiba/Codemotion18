@@ -17,12 +17,13 @@ namespace Xamrealm
 
 		    Instance = this;
 
-            Resources = new ResourceDictionary
+            Resources.MergedDictionaries.Add(new ResourceDictionary
 		    {
 		        ["TaskListColors"] = Constants.Colors.TaskListColors,
 		        ["TaskColors"] = Constants.Colors.TaskColors,
-		        ["CompletedColor"] = Constants.Colors.CompletedColor
-		    };
+		        ["CompletedColor"] = Constants.Colors.CompletedColor,
+
+		    });
 
             SetupIoc();
                 
@@ -47,12 +48,22 @@ namespace Xamrealm
 	    public void SetStartPage()
 	    {
 	        var taskListsPage = FreshPageModelResolver.ResolvePageModel<TaskListsViewModel>();
-	        var taskListsContainer = new FreshNavigationContainer(taskListsPage, NavigationContainerNames.MainContainer);
+	        var taskListsContainer = new FreshNavigationContainer(taskListsPage, NavigationContainerNames.MainContainer)
+	        {
+	            BackgroundColor = (Color)Application.Current.Resources["Grey900"],
+                BarBackgroundColor = (Color)Application.Current.Resources["Grey900"],
+                BarTextColor = Color.White
+	        };
 
 	        var loginPage = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
-	        var loginContainer = new FreshNavigationContainer(loginPage, NavigationContainerNames.LoginContainer);
+	        var loginContainer = new FreshNavigationContainer(loginPage, NavigationContainerNames.LoginContainer)
+	        {
+	            BackgroundColor = (Color) Application.Current.Resources["Grey900"],
+	            BarBackgroundColor = (Color) Application.Current.Resources["Grey900"],
+	            BarTextColor = Color.White
+	        };
 
-            var realmUser = User.Current;
+	        var realmUser = User.Current;
 	        MainPage = realmUser == null ? loginContainer : taskListsContainer;
 	    }
 

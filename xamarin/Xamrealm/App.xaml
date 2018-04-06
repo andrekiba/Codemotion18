@@ -1,10 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Xamrealm.App">
-	<Application.Resources>
+    <Application.Resources>
+        <ResourceDictionary>
 
-		<!-- Application resource dictionary -->
+            <!--Colors-->
+            <Color x:Key="Grey700">#616161</Color>
+            <Color x:Key="Grey800">#424242</Color>
+            <Color x:Key="Grey900">#212121</Color>
 
-	</Application.Resources>
+            <!--Styles-->
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="BackgroundColor" Value="#FF9800"/>
+                <Setter Property="BorderColor" Value="Black"/>
+                <Setter Property="HeightRequest" Value="42"/>
+                <Setter Property="BorderRadius" Value="5"/>
+                <Setter Property="BorderWidth" Value="0" />
+                <Setter Property="TextColor" Value="White"/>
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

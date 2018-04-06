@@ -8,20 +8,16 @@
              mc:Ignorable="d ignore"
              x:Class="Xamrealm.Pages.LoginPage"
              Title="Login"
+             BackgroundColor="{StaticResource Grey900}"
              d:BindingContext="{x:Static base:DesignViewModelLocator.LoginViewModel}">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height = "10" />
-            <RowDefinition Height = "Auto" />
-            <RowDefinition Height = "Auto" />
-            <RowDefinition Height = "Auto" />
-            <RowDefinition Height = "Auto" />
-            <RowDefinition Height = "*" />
-        </Grid.RowDefinitions>
+    
+    <StackLayout Spacing="50" Padding="20,40" HorizontalOptions="Fill" VerticalOptions="StartAndExpand">
+        <StackLayout Spacing="30">
+            <Entry Placeholder="Server URL" Text="{Binding LoginInfo.ServerUrl}" Keyboard ="Url" />
+            <Entry Placeholder="Username" Text="{Binding LoginInfo.Username}" Keyboard="Email" />
+            <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="true" />
+        </StackLayout>
+        <Button Text="Login" Command="{Binding LoginCommand}" Style="{StaticResource ButtonStyle}" />
+    </StackLayout>
 
-        <Entry Grid.Row="1" Placeholder="Server url" Text="{Binding LoginInfo.ServerUrl}" Margin="10" Keyboard ="Url" />
-        <Entry Grid.Row="2" Placeholder="Username" Text="{Binding LoginInfo.Username}"  Margin="10" Keyboard="Email" />
-        <Entry Grid.Row="3" Placeholder="Password" Text="{Binding Password}" Margin="10" IsPassword="true" />
-        <Button Grid.Row="4" Text="Login" Command="{Binding LoginCommand}" Margin="10" />
-    </Grid>
 </ContentPage>

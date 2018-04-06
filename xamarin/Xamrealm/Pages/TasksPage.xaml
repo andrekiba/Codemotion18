@@ -47,7 +47,7 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
                         <Grid.Behaviors>
                             <behaviors:TaskColoringBehavior RealmCollection="{Binding ItemsSource, Source={x:Reference TasksListControl}}"
@@ -61,8 +61,8 @@
                             IsStrikeThrough="{Binding IsCompleted}"/>
 
                         <StackLayout Grid.Column="1" Orientation="Horizontal" Spacing="4"
-                                     VerticalOptions="Center" HorizontalOptions="Center">
-                            <Image Source="like" Scale="0.8">
+                                     VerticalOptions="Center" HorizontalOptions="Start">
+                            <Image Source="like" Scale="0.9">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Path=BindingContext.VoteTaskCommand, Source={x:Reference Name=TasksListControl}}"
                                                           CommandParameter="{Binding .}" />

@@ -11,23 +11,44 @@ using Xamrealm.Base;
 using Xamrealm.Models;
 using Xamrealm.Models.DTO;
 using Constants = Xamrealm.Base.Constants;
+using TTask = System.Threading.Tasks.Task;
 
 namespace Xamrealm.ViewModels
 {
     public class TaskListsViewModel : BaseViewModel
     {
+        #region Fields
+
+        private bool isFirstLoading = true;
+
+        #endregion
+
         #region Properties
+
         public IList<TaskList> TaskLists { get; set; }
         
         #endregion
 
         #region Lifecycle
 
-        protected override void ViewIsAppearing(object sender, EventArgs e)
+        protected override async void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
 
-            Initialize();
+            if(isFirstLoading)
+            {
+                await DoFunc(
+                Initialize,
+                async ex =>
+                {
+                    await TTask.Delay(500);
+                    UserDialogs.Instance.Alert("Unable to login", ex.Message);
+                    LogException(ex);
+                },
+                "Loading...");
+
+                isFirstLoading = false;
+            }
         }
 
         #endregion
@@ -53,26 +74,25 @@ namespace Xamrealm.ViewModels
 
         #region Methods
 
-        private void Initialize()
+        private async TTask Initialize()
         {
             var user = User.Current;
 
             var uri = user.ServerUri;
-            Constants.Server.SyncHost = $"{uri.Host}:{uri.Port}";            
+            Constants.Server.SyncHost = $"{uri.Host}:{uri.Port}";
 
-            try
+            var config = new SyncConfiguration(user, Constants.Server.SyncServerUri)
             {
-                var config = new SyncConfiguration(user, Constants.Server.SyncServerUri)
-                {
-                    //ObjectClasses = new[] {typeof(Board), typeof(TaskList), typeof(Task), typeof(Vote)}
-                };
+                //ObjectClasses = new[] {typeof(Board), typeof(TaskList), typeof(Task), typeof(Vote)}
+            };
 
-                Realm = Realm.GetInstance(config);
+            Realm = await Realm.GetInstanceAsync(config);
 
-                var board = Realm.Find<Board>(0);
-                if (board != null)
-                    return;
+            var board = Realm.Find<Board>(0);
 
+            //create the board the first time
+            if (board == null)
+            {
                 Realm.Write(() =>
                 {
                     board = Realm.Add(new Board());
@@ -82,13 +102,9 @@ namespace Xamrealm.ViewModels
                         Title = Constants.DefaultTaskListName
                     });
                 });
+            }
 
-                TaskLists = board.TaskLists;
-            }
-            catch (Exception ex)
-            {
-                LogException(ex);
-            }
+            TaskLists = board.TaskLists;
         }
 
         private void AddTaskList()
@@ -105,7 +121,11 @@ namespace Xamrealm.ViewModels
             {
                 Realm.Write(() =>
                 {
-                    list.Tasks.ForEach(t => Realm.Remove(t));
+                    list.Tasks.ForEach(t =>
+                    {
+                        t.Votes.ForEach(v => Realm.Remove(v));
+                        Realm.Remove(t);
+                    });
                     Realm.Remove(list);
                 });
             }

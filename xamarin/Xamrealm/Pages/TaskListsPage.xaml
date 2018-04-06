@@ -59,7 +59,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="1"/>
+                            <RowDefinition Height="5"/>
                         </Grid.RowDefinitions>
 
                         <controls:TransparentEntry Grid.Row="0" Grid.RowSpan="2"

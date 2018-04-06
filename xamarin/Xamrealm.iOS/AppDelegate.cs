@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Foundation;
 using UIKit;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 
 namespace Xamrealm.iOS
 {
@@ -26,6 +26,9 @@ namespace Xamrealm.iOS
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 
             global::Xamarin.Forms.Forms.Init();
+
+            UINavigationBar.Appearance.TintColor = Color.White.ToUIColor();
+
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
