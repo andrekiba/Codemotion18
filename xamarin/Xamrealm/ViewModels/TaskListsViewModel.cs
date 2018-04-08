@@ -38,14 +38,15 @@ namespace Xamrealm.ViewModels
             if(isFirstLoading)
             {
                 await DoFunc(
-                Initialize,
-                async ex =>
-                {
-                    await TTask.Delay(500);
-                    UserDialogs.Instance.Alert("Unable to login", ex.Message);
-                    LogException(ex);
-                },
-                "Loading...");
+                    func: async () => await Initialize(),
+                    onError: async ex =>
+                    {
+                        await TTask.Delay(500);
+                        UserDialogs.Instance.Alert("Unable to connect to the remote server!", ex.Message);
+                        LogException(ex);
+                    },
+                    loadingMessage: "Logging in..."
+                );
 
                 isFirstLoading = false;
             }
@@ -77,34 +78,48 @@ namespace Xamrealm.ViewModels
         private async TTask Initialize()
         {
             var user = User.Current;
-
             var uri = user.ServerUri;
-            Constants.Server.SyncHost = $"{uri.Host}:{uri.Port}";
+            Constants.Server.RealmServerAddress = $"{uri.Host}:{uri.Port}";
 
-            var config = new SyncConfiguration(user, Constants.Server.SyncServerUri)
+            //var permissions = await user.GetGrantedPermissionsAsync(Recipient.CurrentUser);
+            //var sharedPermission = permissions.FirstOrDefault(p => p.UserId == user.Identity.ToString());
+
+            //if(sharedPermission != null)
+            //{
+            //    var sharedRealmPath = $"realm://{Constants.Server.RealmServerAddress}/{sharedPermission.Path}";
+            //    Constants.Server.RealmSyncConfig = new SyncConfiguration(user, new Uri(sharedRealmPath));
+            //    return;
+            //}
+
+            var realmConfig = new SyncConfiguration(user, Constants.Server.RealmServerUrl)
             {
-                //ObjectClasses = new[] {typeof(Board), typeof(TaskList), typeof(Task), typeof(Vote)}
+                //ObjectClasses = new[] { typeof(Board), typeof(TaskList), typeof(Task), typeof(Vote) }
             };
 
-            Realm = await Realm.GetInstanceAsync(config);
+            Realm = await Realm.GetInstanceAsync(realmConfig);
 
-            var board = Realm.Find<Board>(0);
+            //create the board the first time for the first user
+            var board = Realm.All<Board>().SingleOrDefault();
 
-            //create the board the first time
             if (board == null)
             {
                 Realm.Write(() =>
                 {
-                    board = Realm.Add(new Board());
+                    board = new Board();
                     board.TaskLists.Add(new TaskList
                     {
                         Id = Constants.DefaultTaskListId,
                         Title = Constants.DefaultTaskListName
                     });
+                    Realm.Add(board);
                 });
             }
 
             TaskLists = board.TaskLists;
+
+            //add access to other users
+            //var condition = PermissionCondition.UserId("mila");
+            //await user.ApplyPermissionsAsync(condition, "*", AccessLevel.Write);
         }
 
         private void AddTaskList()

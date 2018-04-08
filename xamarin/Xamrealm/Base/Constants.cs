@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Forms;
+using Realms;
+using Realms.Sync;
 
 namespace Xamrealm.Base
 {
@@ -9,14 +11,15 @@ namespace Xamrealm.Base
     {
         public const string DefaultTaskListName = "Default List";
         public const string DefaultTaskListId = "80EB1620-165B-4600-A1B1-D97032FDD9A0";
+        public const string RealmName = "xamrealm";
 
         public static class Server
         {
-            public static string SyncHost { get; set; } = "127.0.0.1:9080";
+            public static Uri AuthServerUrl => new Uri($"http://{RealmServerAddress}");
 
-            public static Uri SyncServerUri => new Uri($"realm://{SyncHost}/~/xamrealm");
+            public static string RealmServerAddress { get; set; } = Device.RuntimePlatform == Device.Android ? "10.0.2.2:9080" : "127.0.0.1:9080";
 
-            public static Uri AuthServerUri => new Uri($"http://{SyncHost}");
+            public static Uri RealmServerUrl => new Uri($"realm://{RealmServerAddress}/~/{RealmName}");
         }
 
         public static class Colors

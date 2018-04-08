@@ -4,7 +4,7 @@ using Xamarin.Forms;
 
 namespace Xamrealm.Converters
 {
-    public class CountToVisibilityConverter : IValueConverter
+    public class CountToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

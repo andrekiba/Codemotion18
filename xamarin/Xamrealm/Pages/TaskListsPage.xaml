@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -57,15 +57,11 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="5"/>
-                        </Grid.RowDefinitions>
 
                         <controls:TransparentEntry Grid.Row="0" Grid.RowSpan="2"
-                                    Text="{Binding Title}" TextColor="White"
-									HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                                    IsStrikeThrough="{Binding IsCompleted}"/>
+                                    Text="{Binding Title}"
+                                    Style="{StaticResource TransparentEntryStyle}"
+                                    IsStrikeThrough="{Binding IsCompleted}"/>                          
 
                         <BoxView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
                                  Color="White" Opacity="0.15" />
@@ -76,9 +72,6 @@
                                 CommandParameter="{Binding .}"
 								TextColor="White" BackgroundColor="Transparent" BorderColor="Transparent"
 								HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
-
-                        <BoxView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                 Color="Black" Opacity="0.01" />
                     </Grid>
                 </ViewCell>
             </DataTemplate>

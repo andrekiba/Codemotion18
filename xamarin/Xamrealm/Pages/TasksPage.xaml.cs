@@ -8,7 +8,11 @@ namespace Xamrealm.Pages
 	{
 		public TasksPage ()
 		{
-			InitializeComponent ();
+			InitializeComponent();
+
+            //TasksListControl.ItemSelected += (sender, e) => {
+            //    ((ListView)sender).SelectedItem = null;
+            //};
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Realms;
 
 namespace Xamrealm.Models
@@ -7,7 +8,7 @@ namespace Xamrealm.Models
     {
         [PrimaryKey]
         [MapTo("id")]
-        public int Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [MapTo("taskLists")]
         public IList<TaskList> TaskLists { get; }

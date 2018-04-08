@@ -4,6 +4,7 @@ using Acr.UserDialogs;
 using FreshMvvm;
 using PropertyChanged;
 using Realms;
+using System.Threading;
 
 namespace Xamrealm.Base
 {
@@ -15,7 +16,7 @@ namespace Xamrealm.Base
         [DependsOn(nameof(IsBusy))]
         public bool IsNotBusy => !IsBusy;
 
-        protected async Task<bool> DoFunc(Func<Task> func, Func<Exception, Task> onError = null, string loadingMessage = null)
+        protected async Task<bool> DoFunc(Func<Task> func, Func<Exception, Task> onError = null, string loadingMessage = null, CancellationToken token = default(CancellationToken))
         {
             var ok = true;
             IsBusy = true;

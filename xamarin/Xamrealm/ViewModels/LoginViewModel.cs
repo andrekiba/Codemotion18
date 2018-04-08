@@ -7,6 +7,9 @@ using Xamarin.Forms;
 using Xamrealm.Base;
 using Xamrealm.Models;
 using Credentials = Realms.Sync.Credentials;
+using TTask = System.Threading.Tasks.Task;
+using System.Threading;
+using System;
 
 namespace Xamrealm.ViewModels
 {
@@ -34,7 +37,7 @@ namespace Xamrealm.ViewModels
             {
                 loginInfo = new LoginInfo
                 {
-                    ServerUrl = Constants.Server.SyncHost
+                    ServerUrl = Constants.Server.RealmServerAddress
                 };
 
                 Realm.Write(() => Realm.Add(loginInfo));
@@ -48,41 +51,46 @@ namespace Xamrealm.ViewModels
         #region Commands
 
         private ICommand loginCommand;
-        public ICommand LoginCommand => loginCommand ?? (loginCommand = new Command(Login, () => IsNotBusy));
+        public ICommand LoginCommand => loginCommand ?? (loginCommand = new Command(async () => await Login(), () => IsNotBusy));
 
         #endregion
 
         #region Methods
 
-        private async void Login()
+        private async TTask Login()
         {
+            var cts = new CancellationTokenSource();
+            cts.CancelAfter(TimeSpan.FromMinutes(1));
+
             await DoFunc(
-            func: async () =>
-            {
-                Realm.Write(() =>
+                func: async () =>
                 {
-                    LoginInfo.ServerUrl = LoginInfo.ServerUrl.Replace("http://", string.Empty)
-                        .Replace("https://", string.Empty)
-                        .Replace("realm://", string.Empty)
-                        .Replace("realms://", string.Empty);
-                });
+                    Realm.Write(() =>
+                    {
+                        LoginInfo.ServerUrl = LoginInfo.ServerUrl.Replace("http://", string.Empty)
+                            .Replace("https://", string.Empty)
+                            .Replace("realm://", string.Empty)
+                            .Replace("realms://", string.Empty);
+                    });
 
-                Constants.Server.SyncHost = LoginInfo.ServerUrl;
+                    Constants.Server.RealmServerAddress = LoginInfo.ServerUrl;
 
-                var credentials = Credentials.UsernamePassword(LoginInfo.Username, Password, false);
-                await User.LoginAsync(credentials, Constants.Server.AuthServerUri);
-
-                CoreMethods.SwitchOutRootNavigation(NavigationContainerNames.MainContainer);
-            },
-            onError: async ex =>
-            {
-                await System.Threading.Tasks.Task.Delay(500);
-                UserDialogs.Instance.Alert("Unable to login", ex.Message);
-                LogException(ex);
-            },
-            loadingMessage: "Logging in...");
+                    var credentials = Credentials.UsernamePassword(LoginInfo.Username, Password, false);
+                    await User.LoginAsync(credentials, Constants.Server.AuthServerUrl);
+                                         
+                    CoreMethods.SwitchOutRootNavigation(NavigationContainerNames.MainContainer);
+                },
+                onError: async ex =>
+                {
+                    await TTask.Delay(500);
+                    UserDialogs.Instance.Alert("Unable to login!", ex.Message);
+                    LogException(ex);
+                },
+                loadingMessage: "Logging in...",
+                token: cts.Token
+            );
         }
-    
+
         #endregion
     }
 }

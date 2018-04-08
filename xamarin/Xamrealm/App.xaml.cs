@@ -50,17 +50,17 @@ namespace Xamrealm
 	        var taskListsPage = FreshPageModelResolver.ResolvePageModel<TaskListsViewModel>();
 	        var taskListsContainer = new FreshNavigationContainer(taskListsPage, NavigationContainerNames.MainContainer)
 	        {
-	            BackgroundColor = (Color)Application.Current.Resources["Grey900"],
-                BarBackgroundColor = (Color)Application.Current.Resources["Grey900"],
-                BarTextColor = Color.White
+	            //BackgroundColor = (Color)Application.Current.Resources["Grey900"],
+                //BarBackgroundColor = (Color)Application.Current.Resources["Grey900"],
+                //BarTextColor = Color.White
 	        };
 
 	        var loginPage = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
 	        var loginContainer = new FreshNavigationContainer(loginPage, NavigationContainerNames.LoginContainer)
 	        {
-	            BackgroundColor = (Color) Application.Current.Resources["Grey900"],
-	            BarBackgroundColor = (Color) Application.Current.Resources["Grey900"],
-	            BarTextColor = Color.White
+	            //BackgroundColor = (Color) Application.Current.Resources["Grey900"],
+	            //BarBackgroundColor = (Color) Application.Current.Resources["Grey900"],
+                //BarTextColor = Color.White
 	        };
 
 	        var realmUser = User.Current;

@@ -27,7 +27,7 @@ namespace Xamrealm.iOS
 
             global::Xamarin.Forms.Forms.Init();
 
-            UINavigationBar.Appearance.TintColor = Color.White.ToUIColor();
+            //UINavigationBar.Appearance.TintColor = Color.White.ToUIColor();
 
             LoadApplication(new App());
 

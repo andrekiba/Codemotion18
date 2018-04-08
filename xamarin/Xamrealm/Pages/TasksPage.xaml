@@ -16,7 +16,8 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:CompleteRestoreConverter x:Key="CompleteRestoreConverter" />
-            <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+            <converters:CountToBoolConverter x:Key="CountToBoolConverter" />
+            <converters:NullEmptyStringToBoolConverter x:Key="NullEmptyStringToBoolConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -56,12 +57,12 @@
                         </Grid.Behaviors>
                         <controls:TransparentEntry Grid.Column="0"
                             Text="{Binding Title}"
-                            TextColor="White"
-                            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                            Style="{StaticResource TransparentEntryStyle}"
                             IsStrikeThrough="{Binding IsCompleted}"/>
 
                         <StackLayout Grid.Column="1" Orientation="Horizontal" Spacing="4"
-                                     VerticalOptions="Center" HorizontalOptions="Start">
+                                     VerticalOptions="Center" HorizontalOptions="Start"
+                                     IsVisible="{Binding Title, Converter={StaticResource NullEmptyStringToBoolConverter}}">
                             <Image Source="like" Scale="0.9">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Path=BindingContext.VoteTaskCommand, Source={x:Reference Name=TasksListControl}}"
@@ -69,7 +70,7 @@
                                 </Image.GestureRecognizers>
                             </Image>
                             <Label Text="{Binding Votes.Count}" TextColor="White" LineBreakMode="TailTruncation"
-                                   IsVisible="{Binding Votes.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                                   IsVisible="{Binding Votes.Count, Converter={StaticResource CountToBoolConverter}}"/>
                         </StackLayout>
 
                     </Grid>
