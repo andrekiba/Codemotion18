@@ -8,6 +8,7 @@ using Realms.Sync;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamrealm.Base;
+using Xamrealm.Helpers;
 using Xamrealm.Models;
 using Xamrealm.Models.DTO;
 using Constants = Xamrealm.Base.Constants;
@@ -35,21 +36,21 @@ namespace Xamrealm.ViewModels
         {
             base.ViewIsAppearing(sender, e);
 
-            if(isFirstLoading)
-            {
-                await DoFunc(
-                    func: async () => await Initialize(),
-                    onError: async ex =>
-                    {
-                        await TTask.Delay(500);
-                        UserDialogs.Instance.Alert("Unable to connect to the remote server!", ex.Message);
-                        LogException(ex);
-                    },
-                    loadingMessage: "Logging in..."
-                );
+            if (!isFirstLoading)
+                return;
 
-                isFirstLoading = false;
-            }
+            await DoFunc(
+                func: async () => await Initialize(),
+                onError: async ex =>
+                {
+                    await TTask.Delay(500);
+                    UserDialogs.Instance.Alert("Unable to connect to the remote server!", ex.Message);
+                    LogException(ex);
+                },
+                loadingMessage: "Logging in..."
+            );
+
+            isFirstLoading = false;
         }
 
         #endregion
@@ -91,9 +92,9 @@ namespace Xamrealm.ViewModels
             //    return;
             //}
 
-            var realmConfig = new SyncConfiguration(user, Constants.Server.RealmServerUrl)
+            var realmConfig = new SyncConfiguration(user, new Uri(Constants.Server.RealmServerUrl))
             {
-                //ObjectClasses = new[] { typeof(Board), typeof(TaskList), typeof(Task), typeof(Vote) }
+                ObjectClasses = new[] { typeof(Board), typeof(TaskList), typeof(Task), typeof(Vote) }
             };
 
             Realm = await Realm.GetInstanceAsync(realmConfig);
@@ -108,7 +109,6 @@ namespace Xamrealm.ViewModels
                     board = new Board();
                     board.TaskLists.Add(new TaskList
                     {
-                        Id = Constants.DefaultTaskListId,
                         Title = Constants.DefaultTaskListName
                     });
                     Realm.Add(board);
@@ -119,7 +119,9 @@ namespace Xamrealm.ViewModels
 
             //add access to other users
             //var condition = PermissionCondition.UserId("mila");
-            //await user.ApplyPermissionsAsync(condition, "*", AccessLevel.Write);
+            //await user.ApplyPermissionsAsync(condition, Constants.Server.RealmServerUrl, AccessLevel.Write);
+
+            var invitation = await InvitationHelper.CreateInviteAsync(Constants.Server.RealmServerUrl);
         }
 
         private void AddTaskList()

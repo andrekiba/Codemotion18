@@ -15,11 +15,11 @@ namespace Xamrealm.Base
 
         public static class Server
         {
-            public static Uri AuthServerUrl => new Uri($"http://{RealmServerAddress}");
-
             public static string RealmServerAddress { get; set; } = Device.RuntimePlatform == Device.Android ? "10.0.2.2:9080" : "127.0.0.1:9080";
 
-            public static Uri RealmServerUrl => new Uri($"realm://{RealmServerAddress}/~/{RealmName}");
+            public static string AuthServerUrl => $"http://{RealmServerAddress}";
+
+            public static string RealmServerUrl => $"realm://{RealmServerAddress}/~/{RealmName}";
         }
 
         public static class Colors
