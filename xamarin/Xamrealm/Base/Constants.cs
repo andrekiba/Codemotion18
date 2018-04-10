@@ -19,7 +19,8 @@ namespace Xamrealm.Base
 
             public static string AuthServerUrl => $"http://{RealmServerAddress}";
 
-            public static string RealmServerUrl => $"realm://{RealmServerAddress}/~/{RealmName}";
+            //public static string RealmServerUrl => $"realm://{RealmServerAddress}/~/{RealmName}";
+            public static string RealmServerUrl => $"realm://{RealmServerAddress}/{RealmName}";
         }
 
         public static class Colors

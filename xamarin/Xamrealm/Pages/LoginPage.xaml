@@ -8,6 +8,7 @@
              mc:Ignorable="d ignore"
              x:Class="Xamrealm.Pages.LoginPage"
              Title="Login"
+             BackgroundColor="{StaticResource Grey800}"
              d:BindingContext="{x:Static base:DesignViewModelLocator.LoginViewModel}">
     
     <StackLayout Spacing="50" Padding="20,40" HorizontalOptions="Fill" VerticalOptions="StartAndExpand">

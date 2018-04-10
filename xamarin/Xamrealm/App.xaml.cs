@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using Xamrealm.Base;
 using Xamrealm.ViewModels;
 using Constants = Xamrealm.Base.Constants;
+using Xamarin.Forms.Internals;
 
 namespace Xamrealm
 {
@@ -47,20 +48,20 @@ namespace Xamrealm
 
 	    public void SetStartPage()
 	    {
-	        var taskListsPage = FreshPageModelResolver.ResolvePageModel<TaskListsViewModel>();
-	        var taskListsContainer = new FreshNavigationContainer(taskListsPage, NavigationContainerNames.MainContainer)
-	        {
-	            //BackgroundColor = (Color)Application.Current.Resources["Grey900"],
-                //BarBackgroundColor = (Color)Application.Current.Resources["Grey900"],
-                //BarTextColor = Color.White
+            bool iOS = Device.RuntimePlatform == Device.iOS;
+
+            var taskListsPage = FreshPageModelResolver.ResolvePageModel<TaskListsViewModel>();
+            var taskListsContainer = new FreshNavigationContainer(taskListsPage, NavigationContainerNames.MainContainer)
+            {
+                BarBackgroundColor = iOS ? Color.White : (Color)Application.Current.Resources["Grey900"],
+                BarTextColor = iOS ? Color.Black : Color.White
 	        };
 
 	        var loginPage = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
 	        var loginContainer = new FreshNavigationContainer(loginPage, NavigationContainerNames.LoginContainer)
 	        {
-	            //BackgroundColor = (Color) Application.Current.Resources["Grey900"],
-	            //BarBackgroundColor = (Color) Application.Current.Resources["Grey900"],
-                //BarTextColor = Color.White
+                BarBackgroundColor = iOS ? Color.White : (Color)Application.Current.Resources["Grey900"],
+                BarTextColor = iOS ? Color.Black : Color.White
 	        };
 
 	        var realmUser = User.Current;

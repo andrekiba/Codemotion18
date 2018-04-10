@@ -12,6 +12,11 @@
             <Color x:Key="Grey900">#212121</Color>
 
             <Color x:Key="Orange">#FF9800</Color>
+            <Color x:Key="Grey">#454f5b</Color>
+            <Color x:Key="LightGrey">#738498</Color>
+            <Color x:Key="NeonGreen">#c7f464</Color>
+            <Color x:Key="Aqua">#4ecdc4</Color>
+
 
             <!--Styles-->
             <Style x:Key="ButtonStyle" TargetType="Button">
