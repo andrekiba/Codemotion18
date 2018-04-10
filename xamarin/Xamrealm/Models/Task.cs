@@ -14,6 +14,15 @@ namespace Xamrealm.Models
         [Required]
         public string Title { get; set; } = string.Empty;
 
+        [MapTo("description")]
+        public string Description { get; set; }
+
+        [MapTo("score")]
+        public float Score { get; set; }
+
+        [MapTo("tags")]
+        public string Tags { get; set; }
+
         [MapTo("dueDate")]
         public DateTimeOffset DueDate { get; set; }
 
