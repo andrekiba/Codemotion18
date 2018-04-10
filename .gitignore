@@ -247,3 +247,6 @@ Components/
 
 # VSCode
 .vscode/
+
+# Realm Notifier
+RealmNotifier/

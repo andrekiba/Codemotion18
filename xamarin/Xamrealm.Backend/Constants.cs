@@ -10,7 +10,7 @@
 
         public const string SentimentUrl = "https://westeurope.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment";
         public const string KeyPhraseUrl = "https://westeurope.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases";
-        public const string NotifierDirectory = "NotifierRealms";
+        public const string NotifierDirectory = "RealmNotifier";
         public const string RealmName = "xamrealm";
     }
 }
