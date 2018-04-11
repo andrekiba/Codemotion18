@@ -43,6 +43,13 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="TagsLabelStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="FontSize" Value="Small"/>
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

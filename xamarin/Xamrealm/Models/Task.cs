@@ -7,29 +7,29 @@ namespace Xamrealm.Models
     public class Task : RealmObject, ICompletable
     {
         [PrimaryKey]
-        [MapTo("id")]
+        //[MapTo("id")]
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        [MapTo("title")]
+        //[MapTo("title")]
         [Required]
         public string Title { get; set; } = string.Empty;
 
-        [MapTo("description")]
+        //[MapTo("description")]
         public string Description { get; set; }
 
-        [MapTo("score")]
+        //[MapTo("score")]
         public float Score { get; set; }
 
-        [MapTo("tags")]
+        //[MapTo("tags")]
         public string Tags { get; set; }
 
-        [MapTo("dueDate")]
+        //[MapTo("dueDate")]
         public DateTimeOffset DueDate { get; set; }
 
-        [MapTo("completed")]
+        //[MapTo("completed")]
         public bool IsCompleted { get; set; }
 
-        [MapTo("votes")]
+        //[MapTo("votes")]
         public IList<Vote> Votes { get; }
     }
 }

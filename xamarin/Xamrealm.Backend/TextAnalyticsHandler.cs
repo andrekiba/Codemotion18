@@ -38,11 +38,17 @@ namespace Xamrealm.Backend
                     //filter modifications only related to task's title or description
                     //otherwise we have a beautiful endless loop :-)
                     var modifiedTasks = changeSetDetails.Modifications
-                        .Where(m => m.CurrentObject.Title != null && m.CurrentObject.Title != string.Empty 
-                                    && m.PreviousObject.Title != m.CurrentObject.Title)
-                        .Select(x => x.CurrentObject)
-                        .Select(t => new {Id = (string) t.Id, Obj = t})
-                        .ToDictionary(x => x.Id, y => y.Obj);
+                                                        //.ToList()
+                                                        .Where(m => m.CurrentObject.Title != null && m.CurrentObject.Title != string.Empty &&
+                                                                    m.PreviousObject.Title != m.CurrentObject.Title)
+                                                        .Select(x =>
+                                                        {
+                                                            Console.WriteLine(x);
+                                                            return x;
+                                                        })
+                                                        .Select(x => x.CurrentObject)
+                                                        .Select(t => new { Id = (string)t.Id, Obj = t })
+                                                        .ToDictionary(x => x.Id, y => y.Obj);
 
                     var texts = modifiedTasks
                         .Select(t => new { Id = t.Key, Text = (string)t.Value.Title })

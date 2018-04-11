@@ -8,8 +8,13 @@ namespace Xamrealm.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var votes = (int)value;
-            return votes > 0;
+            if (value is float f)
+                return f > 0f;
+
+            if (value is int n)
+                return n > 0;
+
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

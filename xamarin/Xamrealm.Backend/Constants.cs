@@ -4,7 +4,7 @@
     {
         public const string TextAnalyticsApiKey = "7edc0238d2ef4e37a9866f48d2ba0ebc";
 
-        public const string RosUrl = "localhost:9080";
+        public const string RosUrl = "127.0.0.1:9080";
         public const string RosUsername = "realm-admin";
         public const string RosPassword = "";
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Xamarin.Forms;
+using Xamrealm.Base;
 
 namespace Xamrealm.Converters
 {
@@ -9,20 +10,20 @@ namespace Xamrealm.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (!(value is float floatValue))
-                return "U+1F603";
+                return new Emoji(0x1F603).ToString();
 
             if (floatValue < 0.25f)
-                return "U+1F625";
+                return new Emoji(0x1F625).ToString();
 
             if (floatValue < 0.75f)
-                return "U+1F609";
+                return new Emoji(0x1F609).ToString();
 
-            return "U+1F603";
+            return new Emoji(0x1F603).ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }
