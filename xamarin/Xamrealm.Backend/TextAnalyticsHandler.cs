@@ -43,6 +43,8 @@ namespace Xamrealm.Backend
 
                 try
                 {
+                   
+
                     //filter modifications only related to task's title if > 20 char
                     //otherwise we have a beautiful endless loop :-)
                     var modifiedTasks = changeSetDetails.Modifications

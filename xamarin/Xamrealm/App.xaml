@@ -55,6 +55,7 @@
                 <Setter Property="Keyboard" Value="Chat"/>
                 <Setter Property="VerticalOptions" Value="FillAndExpand"/>
                 <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
             </Style>
 
         </ResourceDictionary>
