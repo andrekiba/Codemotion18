@@ -31,5 +31,8 @@ namespace Xamrealm.Models
 
         //[MapTo("votes")]
         public IList<Vote> Votes { get; }
+
+        [Ignored]
+        public bool Display { get; set; }
     }
 }
