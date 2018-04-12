@@ -67,7 +67,7 @@
 
                         <StackLayout Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5"
                                      VerticalOptions="Center" HorizontalOptions="Fill"
-                                     Padding="10,0,0,0">
+                                     Padding="15,0,0,0">
                             <Label Text="{Binding Score, Converter={StaticResource ScoreToEmojiConverter}}"
                                    IsVisible="{Binding Score, Converter={StaticResource CountToBoolConverter}}"
                                    Style="{StaticResource TagsLabelStyle}"/>
