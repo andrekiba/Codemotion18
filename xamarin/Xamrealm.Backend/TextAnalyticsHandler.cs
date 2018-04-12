@@ -7,8 +7,8 @@ using Microsoft.ProjectOxford.Text.KeyPhrase;
 using Microsoft.ProjectOxford.Text.Sentiment;
 using Realms;
 using Realms.Server;
-using System.Reactive.Subjects;
 using System.Reactive.Linq;
+using System.Timers;
 
 namespace Xamrealm.Backend
 {
@@ -16,7 +16,8 @@ namespace Xamrealm.Backend
     {
         private readonly SentimentClient sentimentClient;
         private readonly KeyPhraseClient keyPhraseClient;
-        //private readonly Subject<IModificationDetails> modificationSubject;
+        private Timer timer;
+        bool throttling = true;
 
         public TextAnalyticsHandler() : base($"^/{Constants.RealmName}$")
         {
@@ -30,47 +31,49 @@ namespace Xamrealm.Backend
                 Url = Constants.KeyPhraseUrl
             };
 
-            //modificationSubject = new Subject<IModificationDetails>();
-            //var subscription = HandleModifications(modificationSubject);
+            timer = new Timer(TimeSpan.FromSeconds(5).TotalMilliseconds);
+            timer.Elapsed += (s, e) => 
+            {
+                throttling = false;
+                timer.Stop();
+            };
         }
 
         public override async Task HandleChangeAsync(IChangeDetails details)
         {
+
+            //if(throttling)
+            //{
+            //    timer.Start();
+            //    return;
+            //}
+
+            //Console.WriteLine("Invio!");
+
+
             if (details.Changes.TryGetValue("Task", out var changeSetDetails) && changeSetDetails.Modifications.Any())
             {
-                //foreach (var m in changeSetDetails.Modifications)
-                    //modificationSubject.OnNext(m);
-
+                //3 seconds throttling
+                //await Task.Delay(TimeSpan.FromSeconds(3));
                 try
                 {
-                   
-
                     //filter modifications only related to task's title if > 20 char
                     //otherwise we have a beautiful endless loop :-)
-                    var modifiedTasks = changeSetDetails.Modifications
-                                                        //.Where(m => m.CurrentObject.Title != null && m.CurrentObject.Title != string.Empty &&
-                                                                    //m.PreviousObject.Title != m.CurrentObject.Title)
-                                                        .Where(m => !string.IsNullOrWhiteSpace(m.CurrentObject.Title) &&
-                                                                    m.PreviousObject.Title != m.CurrentObject.Title &&
-                                                                    ((string)m.CurrentObject.Title).Length > 20
-                                                              )
-                                                        //.Select(x =>
-                                                        //{
-                                                        //    Console.WriteLine(x);
-                                                        //    return x;
-                                                        //})
-                                                        .Select(x => x.CurrentObject)
-                                                        .Select(t => new { Id = (string)t.Id, Obj = t })
-                                                        .ToDictionary(x => x.Id, y => y.Obj);
+                    var modifiedTasks = (from m in changeSetDetails.Modifications
+                                         where m.CurrentObject != null && m.PreviousObject != null
+                                         group m by m.CurrentObject.Id into g
+                                         let last = g.Last().CurrentObject
+                                         let text = (string)last.Title
+                                         where text.Length > 20
+                                         select new { Id = (string)g.Key, Obj = last, Text = text })
+                                         .ToDictionary(x => x.Id, y => new {y.Obj, y.Text});
+
+                    if (!modifiedTasks.Any())
+                        return;
 
                     var texts = modifiedTasks
-                        .Select(t => new { Id = t.Key, Text = (string)t.Value.Title })
-                        //.Select(t => new {Id = t.Key, Text = (string)(t.Value.Title + Environment.NewLine + t.Value.Description) } )
-                        //.Where(t => t.Text.Length > 20)
+                        .Select(t => new { Id = t.Key, t.Value.Text })
                         .ToList();
-
-                    if (!texts.Any())
-                        return;
 
                     #region Analytics
 
@@ -124,13 +127,14 @@ namespace Xamrealm.Backend
                         .Select(doc =>
                         {
                             //var obj = changeSetDetails.Modifications[int.Parse(doc.Id)].CurrentObject;
-                            var obj = modifiedTasks[doc.Id];
+                            var obj = modifiedTasks[doc.Id].Obj;
+                            var text = modifiedTasks[doc.Id].Text;
 
                             if (!keyPhraseDictionary.TryGetValue(doc.Id, out var keyPhrases) || keyPhrases == null)
                                 keyPhrases = new List<string> { "Unknown" };
 
                             Console.WriteLine("------------------");
-                            Console.WriteLine($"Analyzed: {obj.Title}");
+                            Console.WriteLine($"Analyzed: {text}");
                             Console.WriteLine($"Score: {doc.Score}");
                             Console.WriteLine($"KeyPhrases: {string.Join(", ", keyPhrases)}");
                             Console.WriteLine("------------------");
@@ -173,119 +177,11 @@ namespace Xamrealm.Backend
                     Console.WriteLine(ex.Message);
                     Console.WriteLine(ex.StackTrace);
                 }
-
-            }
-        }
-
-
-
-        private IDisposable HandleModifications(IObservable<IModificationDetails> modifications)
-        {
-            return modifications
-                .Throttle(TimeSpan.FromSeconds(3))
-                .Where(m => !string.IsNullOrWhiteSpace(m.CurrentObject.Title) &&
-                       m.PreviousObject.Title != m.CurrentObject.Title &&
-                       ((string)m.CurrentObject.Title).Length > 20)
-                .Select(x => x.CurrentObject)
-                //.Select(t => new { Id = (string)t.Id, Obj = t })
-                //.GroupBy(t => t.Id)
-                .Sample(TimeSpan.FromSeconds(1))
-                .Do(Console.WriteLine)
-                .Subscribe(CallAnalyticsApiAndUpdateTags);
-        }
-
-        private async void CallAnalyticsApiAndUpdateTags(dynamic task)
-        {
-            #region Analytics
-
-            var id = (string)task.Id;
-            var title = (string)task.Title;
-
-            var sentimentRequest = new List<IDocument> {
-                new SentimentDocument
-                {
-                    Id = id,
-                    Text = title,
-                    Language = "en"
-                }};
-
-            var sentimentResponse = await sentimentClient.GetSentimentAsync(new SentimentRequest
-            {
-                Documents = sentimentRequest
-            });
-
-            foreach (var error in sentimentResponse.Errors)
-            {
-                Console.WriteLine("Error from sentiment API: " + error.Message);
             }
 
-            var keyPhraseRequest = new List<IDocument> {
-                new KeyPhraseDocument
-                {
-                    Id = id,
-                    Text = title,
-                    Language = "en"
-                }};
 
-            var keyPhraseResponse = await keyPhraseClient.GetKeyPhrasesAsync(new KeyPhraseRequest
-            {
-                Documents = keyPhraseRequest
-            });
+            //throttling = true;
 
-            foreach (var error in keyPhraseResponse.Errors)
-            {
-                Console.WriteLine("Error from KeyPhrase API: " + error.Message);
-            }
-
-            var keyPhraseDictionary = keyPhraseResponse.Documents.ToDictionary(d => d.Id, d => d.KeyPhrases);
-
-            #endregion
-
-            var toUpdate = sentimentResponse.Documents
-                        .Select(doc =>
-                        {
-                            if (!keyPhraseDictionary.TryGetValue(doc.Id, out var keyPhrases) || keyPhrases == null)
-                                keyPhrases = new List<string> { "Unknown" };
-
-                            Console.WriteLine("------------------");
-                            Console.WriteLine($"Analyzed: {title}");
-                            Console.WriteLine($"Score: {doc.Score}");
-                            Console.WriteLine($"KeyPhrases: {string.Join(", ", keyPhrases)}");
-                            Console.WriteLine("------------------");
-
-                            //return new
-                            //{
-                            //    doc.Score,
-                            //    Reference = ThreadSafeReference.Create(task),
-                            //    KeyPhrases = keyPhrases
-                            //};
-                            return new {};
-                        })
-                        .ToList();
-
-            #region Update Realm
-
-            //using (var realm = details.GetRealmForWriting())
-            //{
-            //    var resolved = toUpdate.Select(x => new
-            //    {
-            //        Object = realm.ResolveReference(x.Reference),
-            //        x.Score,
-            //        x.KeyPhrases
-            //    })
-            //    .ToList();
-
-            //    realm.Write(() =>
-            //    {
-            //        foreach (var item in resolved)
-            //        {
-            //            item.Object.Score = item.Score;
-            //            item.Object.Tags = string.Join(" ", item.KeyPhrases);
-            //        }
-            //    });
-            //}
-
-            #endregion
         }
     }
 }

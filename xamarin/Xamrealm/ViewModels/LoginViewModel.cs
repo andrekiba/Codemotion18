@@ -53,9 +53,6 @@ namespace Xamrealm.ViewModels
         private ICommand loginCommand;
         public ICommand LoginCommand => loginCommand ?? (loginCommand = new Command(async () => await Login(), () => IsNotBusy));
 
-        private ICommand getInvitationCommand;
-        public ICommand GetInvitationCommand => getInvitationCommand ?? (getInvitationCommand = new Command(async () => await GetInvitation(), () => IsNotBusy));
-
         #endregion
 
         #region Methods
@@ -90,40 +87,6 @@ namespace Xamrealm.ViewModels
                     LogException(ex);
                 },
                 loadingMessage: "Logging in...",
-                token: cts.Token
-            );
-        }
-
-        private async TTask GetInvitation()
-        {
-            var cts = new CancellationTokenSource();
-            cts.CancelAfter(TimeSpan.FromMinutes(1));
-
-            await DoFunc(
-                func: async () =>
-                {
-                    Realm.Write(() =>
-                    {
-                        LoginInfo.ServerUrl = LoginInfo.ServerUrl.Replace("http://", string.Empty)
-                            .Replace("https://", string.Empty)
-                            .Replace("realm://", string.Empty)
-                            .Replace("realms://", string.Empty);
-                    });
-
-                    Constants.Server.RealmServerAddress = LoginInfo.ServerUrl;
-
-                    var credentials = Credentials.UsernamePassword(LoginInfo.Username, Password, false);
-                    await User.LoginAsync(credentials, new Uri(Constants.Server.AuthServerUrl));
-
-                    CoreMethods.SwitchOutRootNavigation(NavigationContainerNames.MainContainer);
-                },
-                onError: async ex =>
-                {
-                    await TTask.Delay(500, cts.Token);
-                    UserDialogs.Instance.Alert("Unable to get invitation!", ex.Message);
-                    LogException(ex);
-                },
-                loadingMessage: "Retrieving the invitation...",
                 token: cts.Token
             );
         }

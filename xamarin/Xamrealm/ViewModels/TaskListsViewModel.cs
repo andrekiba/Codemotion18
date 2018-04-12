@@ -82,16 +82,6 @@ namespace Xamrealm.ViewModels
             var uri = user.ServerUri;
             Constants.Server.RealmServerAddress = $"{uri.Host}:{uri.Port}";
 
-            //var permissions = await user.GetGrantedPermissionsAsync(Recipient.CurrentUser);
-            //var sharedPermission = permissions.FirstOrDefault(p => p.UserId == user.Identity.ToString());
-
-            //if(sharedPermission != null)
-            //{
-            //    var sharedRealmPath = $"realm://{Constants.Server.RealmServerAddress}/{sharedPermission.Path}";
-            //    Constants.Server.RealmSyncConfig = new SyncConfiguration(user, new Uri(sharedRealmPath));
-            //    return;
-            //}
-
             var realmConfig = new SyncConfiguration(user, new Uri(Constants.Server.RealmServerUrl))
             {
                 ObjectClasses = new[] { typeof(Board), typeof(TaskList), typeof(Task), typeof(Vote) }
@@ -117,11 +107,7 @@ namespace Xamrealm.ViewModels
 
             TaskLists = board.TaskLists;
 
-            //add access to other users
-            //var condition = PermissionCondition.UserId("mila");
-            //await user.ApplyPermissionsAsync(condition, Constants.Server.RealmServerUrl, AccessLevel.Write);
-
-            var invitation = await InvitationHelper.CreateInviteAsync(Constants.Server.RealmServerUrl);
+            //var invitation = await InvitationHelper.CreateInviteAsync(Constants.Server.RealmServerUrl);
         }
 
         private void AddTaskList()

@@ -15,12 +15,5 @@ namespace Xamrealm.Pages
             //    ((ListView)sender).SelectedItem = null;
             //};
         }
-
-        private void TasksListControlOnItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            if (!(e.Item is Task task))
-                return;
-            task.Display = !task.Display;
-        }
     }
 }

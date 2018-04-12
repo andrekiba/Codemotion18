@@ -18,7 +18,6 @@
             <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="true" />
         </StackLayout>
         <Button Text="Login" Command="{Binding LoginCommand}" Style="{StaticResource ButtonStyle}" />
-        <Button Text="Get Invitation" Command="{Binding GetInvitationCommand}" Style="{StaticResource ButtonStyle}" />
     </StackLayout>
 
 </ContentPage>

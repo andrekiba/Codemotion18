@@ -28,8 +28,7 @@
 
     <ListView ItemsSource="{Binding TaskList.Tasks}" 
               x:Name="TasksListControl" 
-              ItemTapped="TasksListControlOnItemTapped"
-              HasUnevenRows="True"
+              RowHeight="60"
               SeparatorVisibility="None"
               BackgroundColor="Black">
         <ListView.Behaviors>
@@ -47,54 +46,8 @@
                                   Command="{Binding Path=BindingContext.CompleteTaskCommand, Source={x:Reference Name=TasksListControl}}"
                                   CommandParameter="{Binding .}" />
                     </ViewCell.ContextActions>
-                        <Grid x:Name="Header" RowSpacing="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="60"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="60"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.Behaviors>
-                                <behaviors:TaskColoringBehavior RealmCollection="{Binding ItemsSource, Source={x:Reference TasksListControl}}"
-                                                            TaskListIndex="{Binding Path=BindingContext.TaskListIndex, Source={x:Reference Name=TasksListControl}}"
-                                                            TaskListCount="{Binding Path=BindingContext.TaskListCount, Source={x:Reference Name=TasksListControl}}"/>
-                            </Grid.Behaviors>
-                            <controls:TransparentEntry Grid.Row="0" Grid.Column="0"
-                                                       Text="{Binding Title}"
-                                                       Style="{StaticResource TransparentEntryStyle}"
-                                                       IsStrikeThrough="{Binding IsCompleted}"/>   
-
-                            <StackLayout Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="4"
-                                     VerticalOptions="Center" HorizontalOptions="Start"
-                                     IsVisible="{Binding Title, Converter={StaticResource NullEmptyStringToBoolConverter}}">
-                                <Image Source="like" Scale="0.9">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Path=BindingContext.VoteTaskCommand, Source={x:Reference Name=TasksListControl}}"
-                                                              CommandParameter="{Binding .}" />
-                                    </Image.GestureRecognizers>
-                                </Image>
-                                <Label Text="{Binding Votes.Count}" TextColor="White" LineBreakMode="TailTruncation"
-                                   IsVisible="{Binding Votes.Count, Converter={StaticResource CountToBoolConverter}}"/>
-                            </StackLayout>
                         
-                            <StackLayout x:Name="Body" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                         Orientation="Vertical" Margin="0,30,0,0" IsVisible="{Binding Display}">
-                                <Editor Text="{Binding Description}" Style="{StaticResource TaskEditorStyle}"/>
-                                <StackLayout Orientation="Horizontal" Spacing="5"
-                                             VerticalOptions="Center" HorizontalOptions="Fill"
-                                             Padding="15,0,0,0">
-                                    <Label Text="{Binding Score, Converter={StaticResource ScoreToEmojiConverter}}"
-                                           IsVisible="{Binding Score, Converter={StaticResource CountToBoolConverter}}"
-                                           Style="{StaticResource TagsLabelStyle}"/>
-                                    <Label Text="{Binding Tags}" LineBreakMode="TailTruncation"
-                                           IsVisible="{Binding Tags, Converter={StaticResource NullEmptyStringToBoolConverter}}"
-                                           Style="{StaticResource TagsLabelStyle}"/>
-                                </StackLayout>
-                            </StackLayout>
-                        </Grid>
-                    <!--<Grid RowSpacing="0">
+                    <Grid RowSpacing="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="60"/>
@@ -137,7 +90,7 @@
                                    IsVisible="{Binding Votes.Count, Converter={StaticResource CountToBoolConverter}}"/>
                         </StackLayout>
 
-                    </Grid>-->
+                    </Grid>
                 </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>

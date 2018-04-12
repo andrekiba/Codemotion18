@@ -47,7 +47,7 @@
                 <Setter Property="TextColor" Value="White"/>
                 <Setter Property="VerticalOptions" Value="Center"/>
                 <Setter Property="HorizontalOptions" Value="Start"/>
-                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="FontSize" Value="Small"/>
             </Style>
 
             <Style x:Key="TaskEditorStyle" TargetType="Editor">
