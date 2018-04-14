@@ -16,8 +16,6 @@ namespace Xamrealm.Backend
     {
         private readonly SentimentClient sentimentClient;
         private readonly KeyPhraseClient keyPhraseClient;
-        private Timer timer;
-        bool throttling = true;
 
         public TextAnalyticsHandler() : base($"^/{Constants.RealmName}$")
         {
@@ -30,27 +28,10 @@ namespace Xamrealm.Backend
             {
                 Url = Constants.KeyPhraseUrl
             };
-
-            timer = new Timer(TimeSpan.FromSeconds(5).TotalMilliseconds);
-            timer.Elapsed += (s, e) => 
-            {
-                throttling = false;
-                timer.Stop();
-            };
         }
 
         public override async Task HandleChangeAsync(IChangeDetails details)
         {
-
-            //if(throttling)
-            //{
-            //    timer.Start();
-            //    return;
-            //}
-
-            //Console.WriteLine("Invio!");
-
-
             if (details.Changes.TryGetValue("Task", out var changeSetDetails) && changeSetDetails.Modifications.Any())
             {
                 //3 seconds throttling
@@ -64,9 +45,9 @@ namespace Xamrealm.Backend
                                          group m by m.CurrentObject.Id into g
                                          let last = g.Last().CurrentObject
                                          let text = (string)last.Title
-                                         where text.Length > 20
+                                         where text.Length > 15
                                          select new { Id = (string)g.Key, Obj = last, Text = text })
-                                         .ToDictionary(x => x.Id, y => new {y.Obj, y.Text});
+                                         .ToDictionary(x => x.Id, y => new { y.Obj, y.Text });
 
                     if (!modifiedTasks.Any())
                         return;
@@ -126,7 +107,6 @@ namespace Xamrealm.Backend
                     var toUpdate = sentimentResponse.Documents
                         .Select(doc =>
                         {
-                            //var obj = changeSetDetails.Modifications[int.Parse(doc.Id)].CurrentObject;
                             var obj = modifiedTasks[doc.Id].Obj;
                             var text = modifiedTasks[doc.Id].Text;
 
@@ -178,10 +158,6 @@ namespace Xamrealm.Backend
                     Console.WriteLine(ex.StackTrace);
                 }
             }
-
-
-            //throttling = true;
-
         }
     }
 }

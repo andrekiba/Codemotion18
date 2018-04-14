@@ -43,19 +43,21 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="EntryStyle" TargetType="Entry">
+                <Setter Property="TextColor">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="Color">                            
+                            <On Platform="Android, WinPhone, UWP" Value="White"/>
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <Style x:Key="TagsLabelStyle" TargetType="Label">
                 <Setter Property="TextColor" Value="White"/>
                 <Setter Property="VerticalOptions" Value="Center"/>
                 <Setter Property="HorizontalOptions" Value="Start"/>
                 <Setter Property="FontSize" Value="Small"/>
-            </Style>
-
-            <Style x:Key="TaskEditorStyle" TargetType="Editor">
-                <Setter Property="TextColor" Value="White"/>
-                <Setter Property="Keyboard" Value="Chat"/>
-                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
-                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
-                <Setter Property="BackgroundColor" Value="Transparent"/>
             </Style>
 
         </ResourceDictionary>

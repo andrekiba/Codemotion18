@@ -13,9 +13,9 @@
     
     <StackLayout Spacing="50" Padding="20,40" HorizontalOptions="Fill" VerticalOptions="StartAndExpand">
         <StackLayout Spacing="30">
-            <Entry Placeholder="Server URL" Text="{Binding LoginInfo.ServerUrl}" Keyboard ="Url" />
-            <Entry Placeholder="Username" Text="{Binding LoginInfo.Username}" Keyboard="Email" />
-            <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="true" />
+            <Entry Placeholder="Server URL" Text="{Binding LoginInfo.ServerUrl}" Keyboard ="Url" Style="{StaticResource EntryStyle}"/>
+            <Entry Placeholder="Username" Text="{Binding LoginInfo.Username}" Keyboard="Email" Style="{StaticResource EntryStyle}"/>
+            <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="true" Style="{StaticResource EntryStyle}"/>
         </StackLayout>
         <Button Text="Login" Command="{Binding LoginCommand}" Style="{StaticResource ButtonStyle}" />
     </StackLayout>
