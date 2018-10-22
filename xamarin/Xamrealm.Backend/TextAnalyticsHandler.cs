@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Microsoft.ProjectOxford.Text.Core;
 using Microsoft.ProjectOxford.Text.KeyPhrase;
@@ -8,14 +9,26 @@ using Microsoft.ProjectOxford.Text.Sentiment;
 using Realms;
 using Realms.Server;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Timers;
 
 namespace Xamrealm.Backend
 {
     public class TextAnalyticsHandler : RegexNotificationHandler
     {
+        #region Fields
+
         private readonly SentimentClient sentimentClient;
         private readonly KeyPhraseClient keyPhraseClient;
+        private readonly Subject<IChangeDetails> changesSubject;
+
+        #endregion
+
+        #region Properties
+
+        public IObservable<IChangeDetails> WhenRealmChange { get; private set; }
+
+        #endregion 
 
         public TextAnalyticsHandler() : base($"^/{Constants.RealmName}$")
         {
@@ -28,14 +41,34 @@ namespace Xamrealm.Backend
             {
                 Url = Constants.KeyPhraseUrl
             };
+            
+            changesSubject = new Subject<IChangeDetails>();
+
+            //WhenRealmChange = Observable.Create<IChangeDetails>(observer =>
+            //{
+            //    return Disposable.Empty;
+            //});
+
+            //WhenRealmChange = changesSubject.AsObservable();
+            //changesSubject
+            //    .Where(x => x.Changes.ContainsKey("Task"))
+            //    .Select(x => x.Changes["Task"])
+            //    .Where(x => x.Modifications.Any())
+            //    .SelectMany(x => x.Modifications)
+            //    .Where(m => m.CurrentObject != null && m.PreviousObject != null)
+                
+
+            //    .Subscribe(changeDetails => { },
+            //    ex => { },
+            //    () => { });
         }
 
         public override async Task HandleChangeAsync(IChangeDetails details)
         {
+            changesSubject.OnNext(details);
+
             if (details.Changes.TryGetValue("Task", out var changeSetDetails) && changeSetDetails.Modifications.Any())
             {
-                //3 seconds throttling
-                //await Task.Delay(TimeSpan.FromSeconds(3));
                 try
                 {
                     //filter modifications only related to task's title if > 20 char

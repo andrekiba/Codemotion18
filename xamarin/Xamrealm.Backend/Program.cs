@@ -34,6 +34,11 @@ namespace Xamrealm.Backend
                     }
                 }
 
+                var textAnalytics = new TextAnalyticsHandler();
+                textAnalytics.WhenRealmChange.Subscribe(changeDetails => { },
+                    ex => { },
+                    () => { });
+
                 var notifierConfig = new NotifierConfiguration(admin)
                 {
                     Handlers = { new TextAnalyticsHandler() },

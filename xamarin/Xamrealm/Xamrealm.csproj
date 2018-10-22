@@ -10,12 +10,12 @@
 
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.0.1" />
-    <PackageReference Include="AsyncErrorHandler.Fody" Version="1.1.0" />
+    <PackageReference Include="AsyncErrorHandler.Fody" Version="1.2.3" />
     <PackageReference Include="FreshMvvm" Version="2.2.4" />
-    <PackageReference Include="LiveXAML" Version="2.1.22" />
-    <PackageReference Include="PropertyChanged.Fody" Version="2.2.10" />
-    <PackageReference Include="Realm" Version="2.2.0" />
-    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
+    <PackageReference Include="LiveXAML" Version="2.1.44" />
+    <PackageReference Include="PropertyChanged.Fody" Version="2.5.13" />
+    <PackageReference Include="Realm" Version="3.2.1" />
+    <PackageReference Include="Xamarin.Forms" Version="3.3.0.912540" />
   </ItemGroup>
 
   <ItemGroup>
