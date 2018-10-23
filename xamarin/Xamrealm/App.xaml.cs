@@ -22,8 +22,7 @@ namespace Xamrealm
 		    {
 		        ["TaskListColors"] = Constants.Colors.TaskListColors,
 		        ["TaskColors"] = Constants.Colors.TaskColors,
-		        ["CompletedColor"] = Constants.Colors.CompletedColor,
-
+		        ["CompletedColor"] = Constants.Colors.CompletedColor
 		    });
 
             SetupIoc();
@@ -48,7 +47,7 @@ namespace Xamrealm
 
 	    public void SetStartPage()
 	    {
-            bool iOS = Device.RuntimePlatform == Device.iOS;
+            var iOS = Device.RuntimePlatform == Device.iOS;
 
             var taskListsPage = FreshPageModelResolver.ResolvePageModel<TaskListsViewModel>();
             var taskListsContainer = new FreshNavigationContainer(taskListsPage, NavigationContainerNames.MainContainer)

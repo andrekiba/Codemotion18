@@ -22,7 +22,8 @@ namespace Xamrealm.Backend
 
                 // Hack to create permissions only the first time it's used
                 // this is the only scope of the Foo class
-                var syncConfig = new SyncConfiguration(admin, new Uri($"realm://{Constants.RosUrl}/{Constants.RealmName}"));
+                var syncConfig = new FullSyncConfiguration(new Uri($"realm://{Constants.RosUrl}/{Constants.RealmName}"), admin);
+                //var syncConfig = new SyncConfiguration(admin, new Uri($"realm://{Constants.RosUrl}/{Constants.RealmName}"));
                 using (var realm = Realm.GetInstance(syncConfig))
                 {
                     if (!realm.All<Foo>().Any())
@@ -33,11 +34,6 @@ namespace Xamrealm.Backend
                         await admin.ApplyPermissionsAsync(PermissionCondition.Default, syncConfig.ServerUri.ToString(), AccessLevel.Write);
                     }
                 }
-
-                var textAnalytics = new TextAnalyticsHandler();
-                textAnalytics.WhenRealmChange.Subscribe(changeDetails => { },
-                    ex => { },
-                    () => { });
 
                 var notifierConfig = new NotifierConfiguration(admin)
                 {
