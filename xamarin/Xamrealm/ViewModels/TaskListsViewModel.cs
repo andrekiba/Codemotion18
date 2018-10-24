@@ -81,7 +81,7 @@ namespace Xamrealm.ViewModels
             var uri = user.ServerUri;
             Constants.Server.RealmServerAddress = $"{uri.Host}:{uri.Port}";
 
-            var realmConfig = new FullSyncConfiguration(new Uri(Constants.Server.RealmServerUrl), user)
+            var realmConfig = new SyncConfiguration(user, new Uri(Constants.Server.RealmServerUrl))
             {
                 ObjectClasses = new[] { typeof(Board), typeof(TaskList), typeof(Task), typeof(Vote) }
             };

@@ -21,9 +21,8 @@ namespace Xamrealm.Backend
                 var admin = await User.LoginAsync(credentials, new Uri($"http://{Constants.RosUrl}"));
 
                 // Hack to create permissions only the first time it's used
-                // this is the only scope of the Foo class
-                var syncConfig = new FullSyncConfiguration(new Uri($"realm://{Constants.RosUrl}/{Constants.RealmName}"), admin);
-                //var syncConfig = new SyncConfiguration(admin, new Uri($"realm://{Constants.RosUrl}/{Constants.RealmName}"));
+                // this is the only scope of the Foo class               
+                var syncConfig = new SyncConfiguration(admin, new Uri($"realm://{Constants.RosUrl}/{Constants.RealmName}"));
                 using (var realm = Realm.GetInstance(syncConfig))
                 {
                     if (!realm.All<Foo>().Any())
