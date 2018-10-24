@@ -58,15 +58,15 @@
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
 
-                        <controls:TransparentEntry Grid.Row="0" Grid.RowSpan="2"
+                        <controls:TransparentEntry Grid.Row="0"
                                     Text="{Binding Title}"
                                     Style="{StaticResource TransparentEntryStyle}"
                                     IsStrikeThrough="{Binding IsCompleted}"/>                          
 
-                        <BoxView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                        <BoxView Grid.Row="0" Grid.Column="1"
                                  Color="White" Opacity="0.15" />
 
-                        <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                        <Button Grid.Row="0" Grid.Column="1"
                                 Text="{Binding Tasks.Count}"
                                 Command="{Binding Path=BindingContext.OpenTaskListCommand, Source={x:Reference Name=TaskListsControl}}"
                                 CommandParameter="{Binding .}"

@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using FreshMvvm;
 using PropertyChanged;
 using Realms;
-using System.Threading;
 
-namespace Xamrealm.Base
+namespace Xamrealm.ViewModels
 {
     public class BaseViewModel : FreshBasePageModel
     {
@@ -16,7 +16,7 @@ namespace Xamrealm.Base
         [DependsOn(nameof(IsBusy))]
         public bool IsNotBusy => !IsBusy;
 
-        protected async Task<bool> DoFunc(Func<Task> func, Func<Exception, Task> onError = null, string loadingMessage = null, CancellationToken token = default(CancellationToken))
+        protected async Task<bool> Do(Func<Task> func, Func<Exception, Task> onError = null, string loadingMessage = null, CancellationToken token = default(CancellationToken))
         {
             var ok = true;
             IsBusy = true;

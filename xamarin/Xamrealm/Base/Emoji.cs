@@ -4,7 +4,7 @@ namespace Xamrealm.Base
 {
     public class Emoji
     {
-        readonly int[] codes;
+        private readonly int[] codes;
 
         public Emoji(int[] codes)
         {
@@ -13,7 +13,7 @@ namespace Xamrealm.Base
 
         public Emoji(int code)
         {
-            codes = new int[] { code };
+            codes = new[] { code };
         }
 
         public override string ToString()

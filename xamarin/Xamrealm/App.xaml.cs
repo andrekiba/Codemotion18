@@ -4,7 +4,6 @@ using Xamarin.Forms;
 using Xamrealm.Base;
 using Xamrealm.ViewModels;
 using Constants = Xamrealm.Base.Constants;
-using Xamarin.Forms.Internals;
 
 namespace Xamrealm
 {

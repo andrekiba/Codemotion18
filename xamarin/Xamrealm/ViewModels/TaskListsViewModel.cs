@@ -8,7 +8,6 @@ using Realms.Sync;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamrealm.Base;
-using Xamrealm.Helpers;
 using Xamrealm.Models;
 using Xamrealm.Models.DTO;
 using Constants = Xamrealm.Base.Constants;
@@ -39,7 +38,7 @@ namespace Xamrealm.ViewModels
             if (!isFirstLoading)
                 return;
 
-            await DoFunc(
+            await Do(
                 func: async () => await Initialize(),
                 onError: async ex =>
                 {
@@ -47,7 +46,7 @@ namespace Xamrealm.ViewModels
                     UserDialogs.Instance.Alert("Unable to connect to the remote server!", ex.Message);
                     LogException(ex);
                 },
-                loadingMessage: "Logging in..."
+                loadingMessage: "Loading..."
             );
 
             isFirstLoading = false;
@@ -82,7 +81,7 @@ namespace Xamrealm.ViewModels
             var uri = user.ServerUri;
             Constants.Server.RealmServerAddress = $"{uri.Host}:{uri.Port}";
 
-            var realmConfig = new SyncConfiguration(user, new Uri(Constants.Server.RealmServerUrl))
+            var realmConfig = new FullSyncConfiguration(new Uri(Constants.Server.RealmServerUrl), user)
             {
                 ObjectClasses = new[] { typeof(Board), typeof(TaskList), typeof(Task), typeof(Vote) }
             };
@@ -151,7 +150,7 @@ namespace Xamrealm.ViewModels
         private async void OpenTaskList(TaskList list)
         {
             if (list != null)
-                await DoFunc(
+                await Do(
                 func: async () => 
                 {
                     await CoreMethods.PushPageModel<TasksViewModel>(new TasksInitDTO

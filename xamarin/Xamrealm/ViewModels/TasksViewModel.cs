@@ -3,7 +3,6 @@ using System.Windows.Input;
 using Realms;
 using Realms.Sync;
 using Xamarin.Forms;
-using Xamrealm.Base;
 using Xamrealm.Models;
 using Xamrealm.Models.DTO;
 

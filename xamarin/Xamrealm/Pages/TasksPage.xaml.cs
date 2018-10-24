@@ -1,6 +1,5 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Xamrealm.Models;
 
 namespace Xamrealm.Pages
 {

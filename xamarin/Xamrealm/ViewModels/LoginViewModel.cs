@@ -62,7 +62,7 @@ namespace Xamrealm.ViewModels
             var cts = new CancellationTokenSource();
             cts.CancelAfter(TimeSpan.FromMinutes(1));
 
-            await DoFunc(
+            await Do(
                 func: async () =>
                 {
                     Realm.Write(() =>
